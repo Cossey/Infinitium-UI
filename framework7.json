@@ -1,0 +1,26 @@
+{
+  "cwd": "F:\\Documents\\GitHub\\f7latest",
+  "type": [
+    "pwa"
+  ],
+  "name": "Technitium DNS Server",
+  "framework": "vue",
+  "template": "split-view",
+  "bundler": "webpack",
+  "cssPreProcessor": "less",
+  "theming": {
+    "customColor": true,
+    "color": "#6699ff",
+    "darkTheme": true,
+    "iconFonts": true,
+    "fillBars": true
+  },
+  "customBuild": false,
+  "webpack": {
+    "developmentSourceMap": true,
+    "productionSourceMap": true,
+    "hashAssets": false,
+    "preserveAssetsPaths": false,
+    "inlineAssets": true
+  }
+}
