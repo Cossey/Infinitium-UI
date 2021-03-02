@@ -1,6 +1,6 @@
 <template>
   <f7-page name="logs" ptr @ptr:refresh="fetchData">
-    <f7-navbar title="Logs" back-link="Back"></f7-navbar>
+    <f7-navbar title="Logs" back-link="DNS Server"></f7-navbar>
     <f7-list>
       <f7-list-item
         v-for="log in logs"
@@ -8,6 +8,8 @@
         :title="log.fileName"
         :footer="log.size"
         :link="'/logs/file/' + log.fileName + '/'"
+        view=".view-main"
+        panel-close
         swipeout
         @swipeout:deleted="removeLog(log.fileName)"
       >

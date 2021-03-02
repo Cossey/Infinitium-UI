@@ -1,9 +1,10 @@
 <template>
   <f7-app v-bind="f7params">
     <!-- Left panel with cover effect when hidden -->
-    <f7-panel left cover :visible-breakpoint="960">
-      <f7-view>
+    <f7-panel left reveal :visible-breakpoint="960">
+      <f7-view class="view-left">
         <f7-page>
+          <f7-navbar title="DNS Server"></f7-navbar>
           <f7-list>
             <f7-list-item
               link="/dashboard/"
@@ -55,8 +56,6 @@
             ></f7-list-item>
             <f7-list-item
               link="/logs/"
-              view=".view-main"
-              panel-close
               title="Logs"
             ></f7-list-item>
             <f7-list-item
@@ -71,7 +70,7 @@
     </f7-panel>
 
     <!-- Right panel with reveal effect-->
-    <f7-panel right reveal theme-dark>
+    <f7-panel right reveal>
       <f7-view>
         <f7-page>
           <f7-navbar :title="username"></f7-navbar>

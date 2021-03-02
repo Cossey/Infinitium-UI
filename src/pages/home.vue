@@ -10,7 +10,7 @@
           panel-open="left"
         ></f7-link>
       </f7-nav-left>
-      <f7-nav-title sliding>DNS Server</f7-nav-title>
+      <f7-nav-title sliding>Home</f7-nav-title>
       <f7-nav-right>
         <f7-link
           icon-ios="f7:person_crop_circle"

@@ -8,7 +8,7 @@ Designed using [Framework 7](https://framework7.io/).
 
 Technitium DNS Server is a powerful and fully featured DNS and DHCP server that runs on .NET 5 supported platforms.
 
-It's built in web UI is lacking. Using the documented API, I have designed an alternative, mobile first user interface that 
+It's built in web UI is a bit lacking. Using the documented API, I have designed an alternative, mobile first user interface using the excellent Framework 7.
 
 ## Developing/Compiling
 

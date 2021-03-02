@@ -1,6 +1,18 @@
 <template>
   <f7-page name="logsviewer" ptr @ptr:refresh="fetchData">
-    <f7-navbar :title="'Log ' + file" back-link="Back"> </f7-navbar>
+    <f7-navbar :title="'Log ' + file">
+      <f7-nav-left>
+        <f7-link
+          icon-ios="f7:menu"
+          icon-aurora="f7:menu"
+          icon-md="material:menu"
+          text="Logs"
+          panel-open="left"
+          link="/logs/"
+          view=".view-left"
+        ></f7-link>
+      </f7-nav-left>
+    </f7-navbar>
     <f7-block>
       <p class="wrap">{{ log }}</p>
     </f7-block>
