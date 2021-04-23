@@ -4,6 +4,8 @@ Alternative UI for [Technitium DNS Server](https://github.com/TechnitiumSoftware
 
 Designed using [Framework 7](https://framework7.io/).
 
+> This is a work in progress. There is still much to complete.
+
 ## About
 
 Technitium DNS Server is a powerful and fully featured DNS and DHCP server that runs on .NET 5 supported platforms.

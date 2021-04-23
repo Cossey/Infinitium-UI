@@ -34,7 +34,7 @@
 					"/E",
 					"/Y",
 					"${workspaceFolder}\\www\\*.*",
-					"C:\\Program Files (x86)\\Technitium\\DNS Server\\www"
+					"F:\\Documents\\GitHub\\DnsServerPortable\\www"
 				]
 			},
 			"problemMatcher": [],
