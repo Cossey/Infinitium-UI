@@ -1,6 +1,16 @@
 <template>
   <f7-page name="logs" ptr @ptr:refresh="fetchData">
-    <f7-navbar title="Logs" back-link="DNS Server"></f7-navbar>
+    <f7-navbar title="Logs" back-link="DNS Server">
+      <f7-nav-right>
+         <f7-link
+          icon-ios="f7:trash"
+          icon-aurora="f7:trash"
+          icon-md="material:delete"
+          class="deletePopover"
+          @click="openDeletePopover"
+        ></f7-link>
+      </f7-nav-right>
+    </f7-navbar>
     <f7-list>
       <f7-list-item
         v-for="log in logs"
@@ -56,6 +66,48 @@ export default {
         .finally(() => {
           if (typeof done !== "undefined") done();
         });
+    },
+    deleteStats: function () {
+      f7.dialog.confirm('Do you want to delete all statistics?', 'Delete All Stats', () =>{
+        api.get("deleteAllStats");
+      });
+    },
+    deleteLogs: function () {
+      f7.dialog.confirm('Do you want to delete all log files?', 'Delete All Logs', () => {
+        api.get("deleteAllLogs").then((data) => {
+          this.fetchData();
+        });
+      })
+    },
+    openDeletePopover() {
+      const self = this;
+      if (!self.deletePopover) {
+        self.deletePopover = f7.actions.create({
+          buttons: [
+            {
+              text: 'Delete All Stats',
+              onClick: function() {
+                self.deleteStats();
+              }
+            },
+            {
+              text: 'Delete All Logs',
+              onClick: function() {
+                self.deleteLogs();
+              }
+            },
+            {
+              text: 'Cancel',
+              color: 'red',
+            },
+          ],
+          // Need to specify popover target
+          targetEl: self.$el.querySelector('.deletePopover'),
+        });
+      }
+
+      // Open
+      self.deletePopover.open();
     },
   },
 };
