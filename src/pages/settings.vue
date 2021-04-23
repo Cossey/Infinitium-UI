@@ -303,6 +303,11 @@
             title="Randomize Name"
             v-model:checked="settings.randomizeName"
           ></f7-list-item>
+          <f7-list-item
+            checkbox
+            title="QNAME Minimization"
+            v-model:checked="settings.qnameMinimization"
+          ></f7-list-item>
           <f7-block-footer>
             <p>
               Disable recursion if you wish this server to act only as
@@ -322,6 +327,11 @@
             domains to block.
           </p>
           <p>
+            Prefixing an exclamation mark at the start of a URL to make it an
+            allow list. Domain names in an allow list URL are prevented from being
+            added to the block list zone.
+          </p>
+          <p>
             <a
               class="link external"
               href="https://blog.technitium.com/2018/10/blocking-internet-ads-using-dns-sinkhole.html"
@@ -330,6 +340,11 @@
           </p>
         </div>
         <f7-list no-hairlines-md>
+          <f7-list-item
+            checkbox
+            title="Use NX Domain for blocking"
+            v-model:checked="settings.useNxDomainForBlocking"
+          ></f7-list-item>
           <f7-list-input
             label="Block List URLS"
             type="textarea"
@@ -575,6 +590,18 @@
             placeholder=""
             info="Set 0 to disable auto delete. Max number of days to keep the log files."
             v-model:value="settings.maxLogFileDays"
+            validate
+            :required="settings.enableLogging === true"
+            :pattern="regexNumber()"
+            error-message="Enter a valid number."
+          >
+          </f7-list-input>
+          <f7-list-input
+            label="Max Stat File Days"
+            type="text"
+            placeholder=""
+            info="Set 0 to disable auto delete. Max number of days to keep the dashboard stats."
+            v-model:value="settings.maxStatFileDays"
             validate
             :required="settings.enableLogging === true"
             :pattern="regexNumber()"
