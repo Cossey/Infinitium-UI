@@ -54,10 +54,7 @@
               panel-close
               title="DHCP"
             ></f7-list-item>
-            <f7-list-item
-              link="/logs/"
-              title="Logs"
-            ></f7-list-item>
+            <f7-list-item link="/logs/" title="Logs"></f7-list-item>
             <f7-list-item
               link="/about/"
               view=".view-main"
@@ -136,14 +133,24 @@ import api from "../js/api";
 
 import routes from "../js/routes.js";
 import store from "../js/store";
+import { getDevice } from "framework7";
 
 export default {
   setup() {
+    let theme = localStorage.getItem("theme");
+    let darkMode = localStorage.getItem("dark") || "auto";
+
+    const device = getDevice();
+
+    if ((!theme || theme === "auto") && device.desktop) {
+      theme = "aurora";
+    }
+
     // Framework7 Parameters
     const f7params = {
       name: "Technitium DNS Server", // App name
-      theme: "auto", // Automatic theme detection
-      autoDarkTheme: true,
+      theme: theme || "auto", // Automatic theme detection
+      autoDarkTheme: darkMode === "auto",
       // App store
       store: store,
       // App routes
@@ -156,6 +163,7 @@ export default {
         tapHold: true,
       },
     };
+
     // Login screen data
     const username = ref("");
     const password = ref("");
@@ -178,7 +186,23 @@ export default {
       doLogin,
     };
   },
+  mounted() {
+    f7ready((f7) => {
+      this.updateThemeConfig();
+    });
+  },
   methods: {
+    updateThemeConfig() {
+      let darkMode = localStorage.getItem("dark") || "auto";
+      console.log("Update theme", darkMode);
+      if (darkMode !== "auto") {
+        if (darkMode === "dark") {
+          f7.$("html").addClass("theme-dark");
+        } else {
+          f7.$("html").removeClass("theme-dark");
+        }
+      }
+    },
     newZone() {
       var zonePopup = f7.popup.create({
         el: ".newZonePopup",
