@@ -10,15 +10,15 @@
           panel-open="left"
         ></f7-link>
       </f7-nav-left>
-      <f7-nav-title sliding>Home</f7-nav-title>
-      <f7-nav-right>
+      <f7-nav-title sliding>Dashboard</f7-nav-title>
+      <!-- <f7-nav-right>
         <f7-link
           icon-ios="f7:person_crop_circle"
           icon-aurora="f7:person_crop_circle"
           icon-md="material:account_circle"
           panel-open="right"
         ></f7-link>
-      </f7-nav-right>
+      </f7-nav-right> -->
     </f7-navbar>
 
     <f7-swiper id="Charts" pagination>
@@ -53,11 +53,6 @@
         </f7-block>
       </f7-swiper-slide>
     </f7-swiper>
-
-    <f7-list>
-      <f7-list-item link="/about/" title="About"></f7-list-item>
-      <f7-list-item link="/form/" title="Form"></f7-list-item>
-    </f7-list>
   </f7-page>
 </template>
 <style scoped>
