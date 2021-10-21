@@ -1,8 +1,17 @@
 <template>
   <f7-page name="logs" ptr @ptr:refresh="fetchData">
-    <f7-navbar title="Logs" back-link="DNS Server">
+    <f7-navbar>
+      <f7-nav-left>
+        <f7-link
+          icon-ios="f7:menu"
+          icon-aurora="f7:menu"
+          icon-md="material:menu"
+          panel-open="left"
+        ></f7-link>
+      </f7-nav-left>
+      <f7-nav-title sliding>Logs</f7-nav-title>
       <f7-nav-right>
-         <f7-link
+        <f7-link
           icon-ios="f7:trash"
           icon-aurora="f7:trash"
           icon-md="material:delete"
@@ -16,7 +25,7 @@
         v-for="log in logs"
         v-bind:key="log"
         :title="log.fileName"
-        :footer="log.size"
+        :after="log.size"
         :link="'/logs/file/' + log.fileName + '/'"
         view=".view-main"
         panel-close
@@ -51,6 +60,8 @@ export default {
   mounted() {
     f7ready((f7) => {
       this.fetchData();
+
+      f7.on("logDeleted", this.fetchData);
     });
   },
   methods: {
@@ -68,16 +79,24 @@ export default {
         });
     },
     deleteStats: function () {
-      f7.dialog.confirm('Do you want to delete all statistics?', 'Delete All Stats', () =>{
-        api.get("deleteAllStats");
-      });
+      f7.dialog.confirm(
+        "Do you want to delete all statistics?",
+        "Delete All Stats",
+        () => {
+          api.get("deleteAllStats");
+        }
+      );
     },
     deleteLogs: function () {
-      f7.dialog.confirm('Do you want to delete all log files?', 'Delete All Logs', () => {
-        api.get("deleteAllLogs").then((data) => {
-          this.fetchData();
-        });
-      })
+      f7.dialog.confirm(
+        "Do you want to delete all log files?",
+        "Delete All Logs",
+        () => {
+          api.get("deleteAllLogs").then((data) => {
+            this.fetchData();
+          });
+        }
+      );
     },
     openDeletePopover() {
       const self = this;
@@ -85,24 +104,24 @@ export default {
         self.deletePopover = f7.actions.create({
           buttons: [
             {
-              text: 'Delete All Stats',
-              onClick: function() {
+              text: "Delete All Stats",
+              onClick: function () {
                 self.deleteStats();
-              }
+              },
             },
             {
-              text: 'Delete All Logs',
-              onClick: function() {
+              text: "Delete All Logs",
+              onClick: function () {
                 self.deleteLogs();
-              }
+              },
             },
             {
-              text: 'Cancel',
-              color: 'red',
+              text: "Cancel",
+              color: "red",
             },
           ],
           // Need to specify popover target
-          targetEl: self.$el.querySelector('.deletePopover'),
+          targetEl: self.$el.querySelector(".deletePopover"),
         });
       }
 

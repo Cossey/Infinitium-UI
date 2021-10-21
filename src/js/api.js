@@ -133,6 +133,13 @@ export default {
         url += "token=" + encodeURIComponent(token);
         return url;
     },
+    downloadLog(fileName) {
+        var token = store.state.token;
+
+        var verb = '/log/' + fileName + '?';
+        verb += "token=" + encodeURIComponent(token);
+        location.replace(verb);
+    },
     getLog(fileName) {
         var token = store.state.token;
 

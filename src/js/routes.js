@@ -11,7 +11,7 @@ import RequestAndLoad from '../pages/request-and-load.vue';
 import NotFoundPage from '../pages/404.vue';
 
 import LogsPage from '../pages/logs.vue';
-import LogsViewerPage from '../pages/logsviewer.vue';
+import LogPage from '../pages/log.vue';
 
 var routes = [
   {
@@ -34,22 +34,7 @@ var routes = [
     detailRoutes: [
       {
         path: '/logs/file/:file/',
-        component: LogsViewerPage,
-        //props: true
-        /*
-        async: function ({ router, to, resolve }) {
-          var file = to.params.file;
-          resolve(
-            {
-              component: LogsViewerPage,
-            },
-            {
-              props: {
-                file: file
-              }
-            }
-          );
-        }*/
+        component: LogPage,
       }
     ]
   },
