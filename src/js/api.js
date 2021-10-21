@@ -221,16 +221,12 @@ export default {
         });
     },
     doInitialLogin() {
-        f7.request.get('api/login?user=admin&pass=admin').then((res) => {
-            var data = JSON.parse(res.data);
-            if (data.status == "error") {
-                var ls = f7.loginScreen.create({ el: '#my-login-screen' });
-                ls.open();
-            } else {
-                f7.store.dispatch('token', data.token);
-                f7.dialog.alert('Show change password screen');
-            }
-        });
+        var ls = f7.loginScreen.create({ el: '#my-login-screen' });
+
+        var token = store.state.token;
+        if (token == "") {
+            ls.open();
+        }
     },
     delete(verb, apiKey, arrKey, val, array) {
         this.get("delete" + verb, [[apiKey, val]]).then((data) => {

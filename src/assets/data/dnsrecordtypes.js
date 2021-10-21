@@ -2,7 +2,7 @@ export const dnsRecordTypes = [
     ["NS", "Name Server"],
     ["SOA", "Start of Authority"],
     ["MX", "Mail Exchanger"],
-    ["A", "Address"],
+    ["A", "IP Address"],
     ["AAAA", "IPv6 Address"],
     ["CAA", "Certification Authority Authorization"],
     ["CNAME", "Canonical Name"],

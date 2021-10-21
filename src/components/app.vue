@@ -1,22 +1,16 @@
 <template>
-  <f7-app v-bind="f7params">
+  <f7-app v-bind="f7params" :domCache="false">
     <!-- Left panel with cover effect when hidden -->
-    <f7-panel left reveal :visible-breakpoint="960">
+    <f7-panel left cover :visible-breakpoint="960">
       <f7-view class="view-left">
         <f7-page>
-          <f7-navbar title="DNS Server"></f7-navbar>
+          <f7-navbar title="Technitium DNS"></f7-navbar>
           <f7-list>
             <f7-list-item
-              link="/dashboard/"
+              link="/"
               view=".view-main"
               panel-close
               title="Dashboard"
-            ></f7-list-item>
-            <f7-list-item
-              link="/settings/"
-              view=".view-main"
-              panel-close
-              title="Settings"
             ></f7-list-item>
           </f7-list>
 
@@ -43,10 +37,10 @@
 
           <f7-list>
             <f7-list-item
-              link="/client/"
+              link="/settings/"
               view=".view-main"
               panel-close
-              title="DNS Client"
+              title="Settings"
             ></f7-list-item>
             <f7-list-item
               link="/dhcp/"
@@ -54,7 +48,36 @@
               panel-close
               title="DHCP"
             ></f7-list-item>
-            <f7-list-item link="/logs/" title="Logs"></f7-list-item>
+            <f7-list-item
+              link="/apps/"
+              view=".view-main"
+              panel-close
+              title="Apps"
+            ></f7-list-item>
+          </f7-list>
+
+          <f7-list>
+            <f7-list-item
+              link="/tools/"
+              view=".view-main"
+              panel-close
+              title="Tools"
+            ></f7-list-item>
+            <f7-list-item
+              link="/client/"
+              view=".view-main"
+              panel-close
+              title="DNS Client"
+            ></f7-list-item>
+            <f7-list-item
+              link="/logs/"
+              title="Logs"
+              view=".view-main"
+              panel-close
+            ></f7-list-item>
+          </f7-list>
+
+          <f7-list>
             <f7-list-item
               link="/about/"
               view=".view-main"

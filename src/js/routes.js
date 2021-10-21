@@ -5,10 +5,13 @@ import ZonesPage from '../pages/zones.vue';
 import ViewZonePage from '../pages/viewzone.vue';
 import SettingsPage from '../pages/settings.vue';
 import DNSClientPage from '../pages/dnsclient.vue';
+import DNSClientResultsPage from '../pages/dnsclientresults.vue';
 
 import DynamicRoutePage from '../pages/dynamic-route.vue';
 import RequestAndLoad from '../pages/request-and-load.vue';
 import NotFoundPage from '../pages/404.vue';
+
+import ToolsPage from '../pages/tools.vue';
 
 import LogsPage from '../pages/logs.vue';
 import LogPage from '../pages/log.vue';
@@ -18,6 +21,10 @@ var routes = [
     path: '/',
     component: HomePage,
     keepAlive: true
+  },
+  {
+    path: '/tools/',
+    component: ToolsPage,
   },
   {
     path: '/about/',
@@ -45,6 +52,10 @@ var routes = [
   {
     path: '/client/',
     component: DNSClientPage
+  },
+  {
+    path: '/client/results/',
+    component: DNSClientResultsPage
   },
   {
     path: '/zones/view/:zoneName/',
