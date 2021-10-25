@@ -5,20 +5,38 @@ const store = createStore({
   state: {
     token: "",
     products: [],
-    retryRequest: null
+    retryRequest: null,
+    failedRequests: [],
+    user: "",
+    domain: "",
   },
   getters: {
     token({ state }) {
       return state.token;
+    },
+    user({ state }) {
+      return state.user;
+    },
+    domain({ state }) {
+      return state.domain;
     },
     products({ state }) {
       return state.products;
     },
     retryRequest({state}) {
       return state.retryRequest;
+    },
+    failedRequests({state}) {
+      return state.failedRequests;
     }
   },
   actions: {
+    domain({state}, domain) {
+      state.domain = domain;
+    },
+    user({state}, usr) {
+      state.user = usr;
+    },
     token({ state }, tkn) {
       state.token = tkn;
     },
@@ -27,6 +45,9 @@ const store = createStore({
     },
     setRetryRequest({ state }, retryReq) {
       state.retryRequest = retryReq;
+    },
+    addFailedRequest({ state }, failedReq) {
+      state.failedRequests.push(failedReq); // = [...state.failedRequests, failedReq];
     }
   },
 })
