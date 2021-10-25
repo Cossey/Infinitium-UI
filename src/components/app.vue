@@ -85,29 +85,30 @@
               title="About"
             ></f7-list-item>
           </f7-list>
-        </f7-page>
-      </f7-view>
-    </f7-panel>
-
-    <!-- Right panel with reveal effect-->
-    <f7-panel right reveal>
-      <f7-view>
-        <f7-page>
-          <f7-navbar :title="username"></f7-navbar>
-          <f7-list>
-            <f7-list-item
-              link="#"
-              view=".view-main"
-              panel-close
-              title="Change Password"
-            ></f7-list-item>
-            <f7-list-item
-              link="#"
-              view=".view-main"
-              panel-close
-              title="Logout"
-            ></f7-list-item>
-          </f7-list>
+          <!-- :class="{ currentsection: currentUrl.indexOf('/profile') >= 0 }" -->
+          <div slot="fixed" class="account">
+            <f7-list media-list>
+              <f7-list-item
+                :title="user"
+                :footer="domain"
+                io="f7:person_alt_circle_fill"
+                link="/user/"
+                no-chevron
+                panel-close
+                view=".view-main"
+              >
+                <template #media>
+                  <f7-icon
+                    size="36"
+                    ios="f7:person_alt_circle_fill"
+                    aurora="f7:person_alt_circle_fill"
+                    md="f7:person_alt_circle_fill"
+                    color="gray"
+                  ></f7-icon>
+                </template>
+              </f7-list-item>
+            </f7-list>
+          </div>
         </f7-page>
       </f7-view>
     </f7-panel>
@@ -148,6 +149,61 @@
     </f7-login-screen>
   </f7-app>
 </template>
+<style scoped>
+.panel-left::-webkit-scrollbar {
+  /* WebKit */
+  width: 0;
+  height: 0;
+}
+
+.panel-left {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+.panel-left .page {
+  padding-bottom: calc(
+    var(--f7-tabbar-labels-height) + var(--f7-safe-area-bottom)
+  );
+}
+
+.panel-left .account {
+  z-index: 300;
+  height: calc(var(--f7-tabbar-labels-height) + var(--f7-safe-area-bottom));
+  background: #f5f5f5 !important;
+  position: fixed;
+  bottom: calc(var(--f7-safe-area-bottom));
+  width: 100%;
+}
+
+.panel-left .account .list {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  margin-bottom: 0;
+  height: calc(var(--f7-tabbar-labels-height) + var(--f7-safe-area-bottom));
+}
+
+.panel-left .account:deep() .item-inner {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-right: 4px;
+  margin-left: 4px;
+}
+
+.panel-left .account:deep() .item-content {
+  padding-left: 5px;
+}
+
+.panel-left .account:deep() .item-media {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.theme-dark .panel-left .account {
+  background: #232323 !important;
+}
+</style>
 <script>
 import { ref, onMounted } from "vue";
 import { f7, f7ready } from "framework7-vue";
@@ -155,6 +211,7 @@ import { f7, f7ready } from "framework7-vue";
 import api from "../js/api";
 
 import routes from "../js/routes.js";
+import { useStore } from 'framework7-vue';
 import store from "../js/store";
 import { getDevice } from "framework7";
 
@@ -190,6 +247,8 @@ export default {
     // Login screen data
     const username = ref("");
     const password = ref("");
+    const user = useStore(store, "user");
+    const domain = useStore(store, "domain");
 
     const doLogin = () => {
       api.doLogin(username.value, password.value);
@@ -206,6 +265,8 @@ export default {
       f7params,
       username,
       password,
+      user,
+      domain,
       doLogin,
     };
   },

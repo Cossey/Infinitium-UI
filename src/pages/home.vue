@@ -11,14 +11,6 @@
         ></f7-link>
       </f7-nav-left>
       <f7-nav-title sliding>Dashboard</f7-nav-title>
-      <!-- <f7-nav-right>
-        <f7-link
-          icon-ios="f7:person_crop_circle"
-          icon-aurora="f7:person_crop_circle"
-          icon-md="material:account_circle"
-          panel-open="right"
-        ></f7-link>
-      </f7-nav-right> -->
     </f7-navbar>
 
     <f7-swiper id="Charts" pagination>
@@ -71,10 +63,11 @@ export default {
   setup() {
     const queryResponseChartData = ref([]);
     const queryTypeChartData = ref([]);
-
+    const domain = ref("");
     return {
       queryResponseChartData,
       queryTypeChartData,
+      domain,
     };
   },
   mounted() {
@@ -87,6 +80,10 @@ export default {
   },
   methods: {
     fetchData: function (done) {
+      api.get("getSettings").then((data) => {
+        this.domain = data.dnsServerDomain;
+      });
+
       api.get("getStats", [["type", "lastHour"]]).then((data) => {
         this.queryTypeChartData = api.buildPieChart(data.queryTypeChartData);
         this.queryResponseChartData = api.buildPieChart(
