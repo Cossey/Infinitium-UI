@@ -33,6 +33,12 @@
               panel-close
               title="Blocked"
             ></f7-list-item>
+            <f7-list-item
+              link="/cache/"
+              view=".view-main"
+              panel-close
+              title="Cache"
+            ></f7-list-item>
           </f7-list>
 
           <f7-list>
@@ -85,30 +91,32 @@
               title="About"
             ></f7-list-item>
           </f7-list>
-          <!-- :class="{ currentsection: currentUrl.indexOf('/profile') >= 0 }" -->
-          <div slot="fixed" class="account">
-            <f7-list media-list>
-              <f7-list-item
-                :title="user"
-                :footer="domain"
-                io="f7:person_alt_circle_fill"
-                link="/user/"
-                no-chevron
-                panel-close
-                view=".view-main"
-              >
-                <template #media>
-                  <f7-icon
-                    size="36"
-                    ios="f7:person_alt_circle_fill"
-                    aurora="f7:person_alt_circle_fill"
-                    md="f7:person_alt_circle_fill"
-                    color="gray"
-                  ></f7-icon>
-                </template>
-              </f7-list-item>
-            </f7-list>
-          </div>
+
+          <template v-slot:fixed>
+            <div class="account">
+              <f7-list media-list>
+                <f7-list-item
+                  :title="user"
+                  :footer="domain"
+                  io="f7:person_alt_circle_fill"
+                  link="/user/"
+                  no-chevron
+                  panel-close
+                  view=".view-main"
+                >
+                  <template #media>
+                    <f7-icon
+                      size="36"
+                      ios="f7:person_alt_circle_fill"
+                      aurora="f7:person_alt_circle_fill"
+                      md="f7:person_alt_circle_fill"
+                      color="gray"
+                    ></f7-icon>
+                  </template>
+                </f7-list-item>
+              </f7-list>
+            </div>
+          </template>
         </f7-page>
       </f7-view>
     </f7-panel>
@@ -211,7 +219,7 @@ import { f7, f7ready } from "framework7-vue";
 import api from "../js/api";
 
 import routes from "../js/routes.js";
-import { useStore } from 'framework7-vue';
+import { useStore } from "framework7-vue";
 import store from "../js/store";
 import { getDevice } from "framework7";
 
