@@ -11,61 +11,68 @@
       </f7-nav-left>
       <f7-nav-title sliding>Tools</f7-nav-title>
     </f7-navbar>
-    <f7-block-title>Misc</f7-block-title>
-    <f7-list>
-      <f7-list-item @click="flushCache()" title="Flush Cache"></f7-list-item>
-    </f7-list>
+
+    <f7-block-title>Caching</f7-block-title>
+    <flush-cache></flush-cache>
 
     <f7-block-title>Blocklist</f7-block-title>
-    <f7-list>
-      <f7-list-item
-        header="Next Update On"
-        :title="settings.blockListNextUpdatedOn"
-      >
-      </f7-list-item>
-      <f7-list-button
-        @click="updateBlockLists()"
-        title="Update Blocklists Now"
-      ></f7-list-button>
-    </f7-list>
-    <f7-list>
-      <p>Not Set</p>
-      <f7-list-input label="Disable for" type="text" placeholder="minutes">
-      </f7-list-input>
-      <f7-list-button
-        @click="tempDisableBL()"
-        title="Temporarily Disable Blocklist"
-      ></f7-list-button>
-    </f7-list>
+    <blocklists-temp-disable
+      :disableBlockingTill="settings.temporaryDisableBlockingTill"
+    ></blocklists-temp-disable>
 
     <f7-block-title>Settings</f7-block-title>
     <f7-list>
-      <f7-list-item link="/tools/backup" title="Backup"></f7-list-item>
-      <f7-list-item link="/tools/restore" title="Restore"></f7-list-item>
+      <f7-list-item link="/settings/backup/" title="Backup"></f7-list-item>
+      <f7-list-item link="/settings/restore/" title="Restore"></f7-list-item>
     </f7-list>
   </f7-page>
 </template>
 <script>
+import api from "@/js/api";
+import { f7, f7ready } from "framework7-vue";
+import BlocklistsTempDisable from "@/components/blocklists-temp-disable.vue";
+import FlushCache from "@/components/flush-cache.vue";
+import { ref } from "vue";
+import SettingsBackupPopup from "./settings-backup.vue";
+
 export default {
-  data() {
+  components: {
+    BlocklistsTempDisable,
+    FlushCache,
+  },
+  mounted() {
+    f7ready((f7) => {
+      this.fetchData();
+    });
+  },
+  setup() {
+    const settings = ref({});
     return {
-      //
+      settings,
     };
   },
+  props: {
+    f7router: Object,
+  },
   methods: {
-    flushCache: function () {
-      api.get("flushDnsCache").then((res) => {
-        f7.dialog.alert("Cache Flushed Succesfully.");
+    fetchData: function (done) {
+      api.get("getDnsSettings").then((data) => {
+        this.settings = data;
+
+        f7.store.dispatch('domain', data.dnsServerDomain);
+      });
+    },
+    openBackup: function () {
+      this.f7router.navigate({
+        url: "backup",
+        route: {
+          path: "backup",
+          component: SettingsBackupPopup,
+        },
       });
     },
   },
   computed: {
-    //
-  },
-  mounted() {
-    //
-  },
-  components: {
     //
   },
 };
