@@ -45,13 +45,45 @@
         </f7-block>
       </f7-swiper-slide>
     </f7-swiper>
+
+    <f7-list>
+      <f7-list-item title="Clients" link="/stats/clients/">
+        <template #media>
+          <f7-icon
+            ios="f7:device_desktop"
+            md="material:computer"
+            aurora="material:computer"
+          ></f7-icon>
+        </template>
+      </f7-list-item>
+      <f7-list-item title="Domains" link="/stats/domains/">
+        <template #media>
+          <f7-icon
+            ios="f7:pencil_ellipsis_rectangle"
+            md="material:domain"
+            aurora="material:domain"
+          ></f7-icon>
+        </template>
+      </f7-list-item>
+      <f7-list-item title="Blocked Domains" link="/stats/blocked/">
+        <template #media>
+          <f7-icon
+            ios="f7:xmark_shield"
+            md="material:gpp_bad"
+            aurora="material:gpp_bad"
+          ></f7-icon>
+        </template>
+      </f7-list-item>
+    </f7-list>
+
   </f7-page>
 </template>
 <style scoped>
-.pie-chart >>> svg {
+.pie-chart:deep() svg {
   max-width: 320px;
 }
 </style>
+
 <script>
 import api from "../js/api";
 import store from "../js/store";

@@ -7,6 +7,8 @@ import SettingsPage from '../pages/settings.vue';
 import SettingsBackupPage from '../pages/settings-backup.vue';
 import SettingsRestorePage from '../pages/settings-restore.vue';
 
+import StatsPage from '../pages/stats.vue';
+
 import DNSClientPage from '../pages/dnsclient.vue';
 import DNSClientResultsPage from '../pages/dnsclient-results.vue';
 
@@ -61,6 +63,65 @@ var routes = [
         path: '/logs/file/:file/',
         component: LogPage,
       }
+    ]
+  },
+  {
+    path: '/stats/',
+    routes: [
+      {
+        path: 'clients/',
+        component: StatsPage,
+        options: {
+          props: {
+            statsType: 'topClients'
+          }
+        }
+      },
+      {
+        path: 'clients/:type/',
+        component: StatsPage,
+        options: {
+          props: {
+            statsType: 'topClients'
+          }
+        }
+      },
+      {
+        path: 'domains/',
+        component: StatsPage,
+        options: {
+          props: {
+            statsType: 'topDomains'
+          }
+        },
+      },
+      {
+        path: 'domains/:type/',
+        component: StatsPage,
+        options: {
+          props: {
+            statsType: 'topDomains'
+          }
+        },
+      },
+      {
+        path: 'blocked/',
+        component: StatsPage,
+        options: {
+          props: {
+            statsType: 'topBlockedDomains'
+          }
+        }
+      },
+      {
+        path: 'blocked/:type/',
+        component: StatsPage,
+        options: {
+          props: {
+            statsType: 'topBlockedDomains'
+          }
+        }
+      },
     ]
   },
   {
