@@ -7,13 +7,13 @@
       <f7-link
         @click="downloadLog"
         icon-ios="f7:download_circle"
-        icon-aurora="f7:download_circle"
+        icon-aurora="material:download"
         icon-md="material:download"
       ></f7-link>
       <f7-link
         @click="deleteLog"
         icon-ios="f7:trash"
-        icon-aurora="f7:trash"
+        icon-aurora="material:delete"
         icon-md="material:delete"
       ></f7-link>
     </f7-toolbar>

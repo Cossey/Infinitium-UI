@@ -2,7 +2,7 @@
   <f7-page name="tools">
     <f7-navbar title="Tools">
       <template v-slot:left>
-        <f7-link icon-ios="f7:menu" icon-aurora="f7:menu" icon-md="material:menu" panel-open="left"></f7-link>
+        <f7-link icon-ios="f7:menu" icon-aurora="material:menu" icon-md="material:menu" panel-open="left"></f7-link>
       </template>
     </f7-navbar>
 

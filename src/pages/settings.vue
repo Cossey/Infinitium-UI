@@ -16,42 +16,42 @@
         text="Server"
         icon-ios="f7:device_desktop"
         icon-aurora="material:desktop_windows"
-        icon-md="f7:device_desktop"
+        icon-md="material:desktop_windows"
       ></f7-link>
       <f7-link
         tab-link="#dns"
         text="DNS"
         icon-ios="f7:cloud_upload"
         icon-aurora="material:dns"
-        icon-md="f7:cloud_upload"
+        icon-md="material:dns"
       ></f7-link>
       <f7-link
         tab-link="#blocklist"
         text="Blocking"
         icon-ios="f7:xmark_shield"
         icon-aurora="material:gpp_bad"
-        icon-md="f7:xmark_shield"
+        icon-md="material:gpp_bad"
       ></f7-link>
       <f7-link
         tab-link="#cache"
         text="Cache"
         icon-ios="f7:bolt_horizontal"
         icon-aurora="material:flash_on"
-        icon-md="f7:bolt_horizontal"
+        icon-md="material:flash_on"
       ></f7-link>
       <f7-link
         tab-link="#network"
         text="Network"
         icon-ios="f7:globe"
         icon-aurora="material:language"
-        icon-md="f7:globe"
+        icon-md="material:language"
       ></f7-link>
       <f7-link
         tab-link="#logging"
         text="Log"
         icon-ios="f7:doc_text"
         icon-aurora="material:description"
-        icon-md="f7:doc_text"
+        icon-md="material:description"
       ></f7-link>
     </f7-toolbar>
     <f7-tabs ref="settingInputs">

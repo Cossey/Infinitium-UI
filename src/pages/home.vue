@@ -5,7 +5,7 @@
       <template v-slot:left>
         <f7-link
           icon-ios="f7:menu"
-          icon-aurora="f7:menu"
+          icon-aurora="material:menu"
           icon-md="material:menu"
           panel-open="left"
         ></f7-link>

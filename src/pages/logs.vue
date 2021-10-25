@@ -2,12 +2,12 @@
   <f7-page name="logs" ptr @ptr:refresh="fetchData">
     <f7-navbar title="Logs">
       <template v-slot:left>
-        <f7-link icon-ios="f7:menu" icon-aurora="f7:menu" icon-md="material:menu" panel-open="left"></f7-link>
+        <f7-link icon-ios="f7:menu" icon-aurora="material:menu" icon-md="material:menu" panel-open="left"></f7-link>
       </template>
       <template v-slot:right>
         <f7-link
           icon-ios="f7:trash"
-          icon-aurora="f7:trash"
+          icon-aurora="material:delete"
           icon-md="material:delete"
           class="deletePopover"
           @click="openDeletePopover"

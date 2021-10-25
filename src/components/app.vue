@@ -108,8 +108,8 @@
                     <f7-icon
                       size="36"
                       ios="f7:person_alt_circle_fill"
-                      aurora="f7:person_alt_circle_fill"
-                      md="f7:person_alt_circle_fill"
+                      aurora="material:account_circle"
+                      md="material:account_circle"
                       color="gray"
                     ></f7-icon>
                   </template>
