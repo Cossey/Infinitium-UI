@@ -8,7 +8,7 @@ import SettingsBackupPage from '../pages/settings-backup.vue';
 import SettingsRestorePage from '../pages/settings-restore.vue';
 
 import DNSClientPage from '../pages/dnsclient.vue';
-import DNSClientResultsPage from '../pages/dnsclientresults.vue';
+import DNSClientResultsPage from '../pages/dnsclient-results.vue';
 
 import DynamicRoutePage from '../pages/dynamic-route.vue';
 import RequestAndLoad from '../pages/request-and-load.vue';
@@ -73,7 +73,9 @@ var routes = [
   },
   {
     path: '/client/results/',
-    component: DNSClientResultsPage
+    popup: {
+      component: DNSClientResultsPage
+    }
   },
   {
     path: '/zones/view/:zoneName/',

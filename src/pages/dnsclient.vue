@@ -97,13 +97,13 @@
         </select>
       </f7-list-item>
 
-      <f7-block no-hairlines-md>
+      <f7-block strong no-hairlines-md>
         <f7-row>
           <f7-col width="50" medium="25">
-            <f7-button fill color="blue" @click="doResolve">Resolve</f7-button>
+            <f7-button color="blue" @click="doResolve">Resolve</f7-button>
           </f7-col>
           <f7-col width="50" medium="25">
-            <f7-button fill color="green" @click="doImport">Import</f7-button>
+            <f7-button color="green" @click="doImport">Import</f7-button>
           </f7-col>
           <f7-col width="0" medium="25" />
           <f7-col width="0" medium="25" />
@@ -131,7 +131,7 @@ import { dnsServers } from "@/assets/data/dnsservers";
 import { dnsRecordTypes } from "@/assets/data/dnsrecordtypes";
 import regex from "@/js/regex";
 import api from "@/js/api";
-import DNSClientResultPopup from "./dnsclientresults.vue";
+import DNSClientResultPopup from "./dnsclient-results.vue";
 
 export default {
   setup() {
@@ -209,8 +209,11 @@ export default {
       this.updateConfigParams(address);
     },
     doResolve: function () {
-      if (f7.input.validateInputs(this.$refs.clientInputs.$el) && f7.input.validateInputs(this.$refs.domainInputs.$el)) {
-        f7.preloader.show();
+      if (
+        f7.input.validateInputs(this.$refs.clientInputs.$el) &&
+        f7.input.validateInputs(this.$refs.domainInputs.$el)
+      ) {
+        f7.dialog.preloader("Resolving...");
 
         api
           .get("resolveQuery", [
@@ -220,33 +223,23 @@ export default {
             ["protocol", this.protocol],
           ])
           .then((res) => {
-            const popup = {
-              component: DNSClientResultPopup,
-            };
-
-            this.f7router.navigate(
-              {
-                url: "results",
-                route: {
-                  path: "results",
-                  popup,
-                },
+            this.f7router.navigate("/client/results/", {
+              props: {
+                dnsDetails: res,
+                dnsDetailsRaw: JSON.stringify(res, null, 2),
               },
-              {
-                props: {
-                  dnsDetails: res,
-                  dnsDetailsRaw: JSON.stringify(res, null, 2),
-                },
-              }
-            );
+            });
           })
           .finally(() => {
-            f7.preloader.hide();
+            f7.dialog.close();
           });
       }
     },
     doImport: function () {
-      if (f7.input.validateInputs(this.$refs.clientInputs.$el) && f7.input.validateInputs(this.$refs.domainInputs.$el)) {
+      if (
+        f7.input.validateInputs(this.$refs.clientInputs.$el) &&
+        f7.input.validateInputs(this.$refs.domainInputs.$el)
+      ) {
         f7.dialog.confirm(
           "Importing all the records from the result of this query will overwrite existing records in the zone '" +
             this.domain +
