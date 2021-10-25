@@ -3,6 +3,11 @@ import HomePage from '../pages/home.vue';
 import AboutPage from '../pages/about.vue';
 import ZonesPage from '../pages/zones.vue';
 import ViewZonePage from '../pages/viewzone.vue';
+
+import DhcpPage from '../pages/dhcp.vue';
+import DhcpScopesPage from '../pages/dhcp-scopes.vue';
+import DhcpLeasesPage from '../pages/dhcp-leases.vue';
+
 import SettingsPage from '../pages/settings.vue';
 import SettingsBackupPage from '../pages/settings-backup.vue';
 import SettingsRestorePage from '../pages/settings-restore.vue';
@@ -122,6 +127,22 @@ var routes = [
           }
         }
       },
+    ]
+  },
+  {
+    path: '/dhcp/',
+    component: DhcpPage,
+    tabs: [
+      {
+        path: '/',
+        id: 'leases',
+        component: DhcpLeasesPage,
+      },
+      {
+        path: '/scopes/',
+        id: 'scopes',
+        component: DhcpScopesPage,
+      }
     ]
   },
   {
