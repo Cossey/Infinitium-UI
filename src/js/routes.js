@@ -4,6 +4,9 @@ import AboutPage from '../pages/about.vue';
 import ZonesPage from '../pages/zones.vue';
 import ViewZonePage from '../pages/viewzone.vue';
 import SettingsPage from '../pages/settings.vue';
+import SettingsBackupPage from '../pages/settings-backup.vue';
+import SettingsRestorePage from '../pages/settings-restore.vue';
+
 import DNSClientPage from '../pages/dnsclient.vue';
 import DNSClientResultsPage from '../pages/dnsclientresults.vue';
 
@@ -12,6 +15,7 @@ import RequestAndLoad from '../pages/request-and-load.vue';
 import NotFoundPage from '../pages/404.vue';
 
 import ToolsPage from '../pages/tools.vue';
+import UserPage from '../pages/user.vue';
 
 import LogsPage from '../pages/logs.vue';
 import LogPage from '../pages/log.vue';
@@ -33,6 +37,20 @@ var routes = [
   {
     path: '/settings/',
     component: SettingsPage,
+    routes: [
+      {
+        path: 'backup/',
+        component: SettingsBackupPage,
+      },
+      {
+        path: 'restore/',
+        component: SettingsRestorePage,
+      }
+    ]
+  },
+  {
+    path: '/user/',
+    component: UserPage,
   },
   {
     path: '/logs/',

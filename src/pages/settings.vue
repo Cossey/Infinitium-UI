@@ -518,25 +518,9 @@
         </f7-list>
 
         <f7-block-title>Temporarily Disable</f7-block-title>
-        <f7-list>
-          <f7-list-item
-            title="Disabled Until"
-            :after="temporaryDisableBlockingTill"
-          >
-          </f7-list-item>
-          <f7-list-input
-            label="Disable for"
-            type="text"
-            :pattern="regexNumber()"
-            placeholder="minutes"
-            v-model:value="temporaryDisableBlockMins"
-          >
-          </f7-list-input>
-          <f7-list-button
-            @click="temporaryDisableBlocking()"
-            title="Temporarily Disable Blocklist"
-          ></f7-list-button>
-        </f7-list>
+        <blocklists-temp-disable
+          :disableBlockingTill="settings.temporaryDisableBlockingTill"
+        ></blocklists-temp-disable>
       </f7-tab>
 
       <f7-tab id="cache" class="page-content">
@@ -620,10 +604,7 @@
           </f7-list-input>
         </f7-list>
 
-        <f7-list no-hairlines-md>
-          <f7-list-button @click="flushCache()" title="Flush Cache">
-          </f7-list-button>
-        </f7-list>
+        <flush-cache></flush-cache>
 
         <f7-block-title>Prefetcher</f7-block-title>
         <div class="block">
@@ -879,18 +860,16 @@ import { ref } from "vue";
 import regex from "@/js/regex";
 import BlocklistsSelector from "@/components/blocklists-selector.vue";
 import ForwardersSelector from "@/components/forwarders-selector.vue";
+import BlocklistsTempDisable from "@/components/blocklists-temp-disable.vue";
+import FlushCache from "@/components/flush-cache.vue";
 
 var saveToastItem;
 const savedToast = () => {
   if (!saveToastItem) {
     saveToastItem = f7.toast.create({
-      icon:
-        theme.ios || theme.aurora
-          ? '<i class="f7-icons">floppy_disk</i>'
-          : '<i class="material-icons">save</i>',
       text: "Saved Settings",
-      position: "center",
-      closeTimeout: 1500,
+      horizontalPosition: "center",
+      closeTimeout: 3000,
     });
   }
   saveToastItem.open();
@@ -899,6 +878,8 @@ export default {
   components: {
     BlocklistsSelector,
     ForwardersSelector,
+    BlocklistsTempDisable,
+    FlushCache,
   },
   setup() {
     const settings = ref({});
@@ -923,17 +904,6 @@ export default {
           var date = new Date(dateRaw);
           return date.toLocaleDateString() + " " + date.toLocaleTimeString();
         }
-      },
-      set(value) {},
-    },
-    temporaryDisableBlockingTill: {
-      get() {
-        var dateRaw = this.settings.temporaryDisableBlockingTill;
-        if (!dateRaw) {
-          return "Not Set";
-        }
-        var date = new Date(dateRaw);
-        return date.toLocaleDateString() + " " + date.toLocaleTimeString();
       },
       set(value) {},
     },
@@ -1172,24 +1142,6 @@ export default {
         f7.dialog.alert("Block Lists Updated");
       });
     },
-    temporaryDisableBlocking: function () {
-      var mins = this.temporaryDisableBlockMins;
-      if (mins == "") {
-        f7.dialog.alert("Please enter a number of minutes to disable block.");
-      } else {
-        api.get("temporaryDisableBlocking", [["minutes", mins]]).then((res) => {
-          this.temporaryDisableBlockMins = "";
-          this.settings.temporaryDisableBlockingTill =
-            res.temporaryDisableBlockingTill;
-          +f7.dialog.alert("Blocking Disabled");
-        });
-      }
-    },
-    flushCache: function () {
-      api.get("flushDnsCache").then((res) => {
-        f7.dialog.alert("Cache Flushed");
-      });
-    },
     backupSettings: function () {
       var url = api.buildUrl("backupSettings", [
         ["dnsSettings", true],
@@ -1224,6 +1176,8 @@ export default {
     fetchData: function (done) {
       api.get("getDnsSettings").then((data) => {
         this.settings = data;
+
+        f7.store.dispatch('domain', data.dnsServerDomain);
 
         this.$refs.proxyTypeSS.$el
           .querySelector(".smart-select")
