@@ -1,11 +1,11 @@
 <template>
   <f7-page>
     <f7-navbar back-link="Tools" title="Restore Settings">
-      <f7-nav-right>
+      <template v-slot:right>
         <f7-link @click="dorestore">Restore</f7-link>
-      </f7-nav-right>
+      </template>
     </f7-navbar>
-    <f7-list no-hairlines-md> </f7-list>
+    <f7-list no-hairlines-md></f7-list>
     <f7-list no-hairlines-md>
       <f7-list-item
         checkbox
@@ -19,12 +19,7 @@
         after="log.config"
         v-model:checked="restore.logSettings"
       ></f7-list-item>
-      <f7-list-item
-        checkbox
-        title="DNS Zone Files"
-        after="*.zone"
-        v-model:checked="restore.zones"
-      ></f7-list-item>
+      <f7-list-item checkbox title="DNS Zone Files" after="*.zone" v-model:checked="restore.zones"></f7-list-item>
       <f7-list-item
         checkbox
         title="Allowed Zones File"
@@ -43,28 +38,15 @@
         after="*.scope"
         v-model:checked="restore.scopes"
       ></f7-list-item>
-      <f7-list-item
-        checkbox
-        title="DNS Apps"
-        v-model:checked="restore.apps"
-      ></f7-list-item>
+      <f7-list-item checkbox title="DNS Apps" v-model:checked="restore.apps"></f7-list-item>
       <f7-list-item
         checkbox
         title="Dashboard Stats Files"
         after="*.stat, *.dstat"
         v-model:checked="restore.stats"
       ></f7-list-item>
-      <f7-list-item
-        checkbox
-        title="Log Files"
-        after="*.log"
-        v-model:checked="restore.logs"
-      ></f7-list-item>
-      <f7-list-item
-        checkbox
-        title="Block List Cache Files"
-        v-model:checked="restore.blockLists"
-      ></f7-list-item>
+      <f7-list-item checkbox title="Log Files" after="*.log" v-model:checked="restore.logs"></f7-list-item>
+      <f7-list-item checkbox title="Block List Cache Files" v-model:checked="restore.blockLists"></f7-list-item>
     </f7-list>
     <f7-list no-hairlines-md>
       <f7-list-item

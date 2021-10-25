@@ -1,15 +1,14 @@
 <template>
   <f7-page name="dnsclient">
-    <f7-navbar>
-      <f7-nav-left>
+    <f7-navbar title="DNS Client">
+      <template v-slot:left>
         <f7-link
           icon-ios="f7:menu"
           icon-aurora="f7:menu"
           icon-md="material:menu"
           panel-open="left"
         ></f7-link>
-      </f7-nav-left>
-      <f7-nav-title sliding>DNS Client</f7-nav-title>
+      </template>
     </f7-navbar>
     <f7-list inline-labels no-hairlines-md ref="clientInputs">
       <f7-list-item

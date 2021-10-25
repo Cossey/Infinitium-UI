@@ -1,9 +1,9 @@
 <template>
   <f7-page name="user">
     <f7-navbar :title="user" back-link="Back">
-      <f7-nav-right>
+      <template v-slot:right>
         <f7-link @click="logout">Logout</f7-link>
-      </f7-nav-right>
+      </template>
     </f7-navbar>
     <f7-list ref="changePassword">
       <f7-list-input
@@ -12,8 +12,7 @@
         v-model:value="password.new"
         validate
         required
-      >
-      </f7-list-input>
+      ></f7-list-input>
       <f7-list-input
         label="Confirm Password"
         type="password"
@@ -25,8 +24,7 @@
       >
         <!-- :onValidate="(isValid) => this.validatePassword(isValid)" -->
       </f7-list-input>
-      <f7-list-button @click="changePassword" title="Change Password">
-      </f7-list-button>
+      <f7-list-button @click="changePassword" title="Change Password"></f7-list-button>
     </f7-list>
   </f7-page>
 </template>
@@ -77,7 +75,7 @@ export default {
         if (this.password.new === this.password.repeat) {
           api
             .get("changePassword", [["pass", this.password.new]])
-            .then((res) => {});
+            .then((res) => { });
         } else {
           f7.dialog.alert("Passwords do not match", "Change Password");
         }

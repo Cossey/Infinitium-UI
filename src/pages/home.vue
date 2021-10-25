@@ -1,16 +1,15 @@
 <template>
   <f7-page name="home" ptr @ptr:refresh="fetchData">
     <!-- Top Navbar -->
-    <f7-navbar :sliding="false">
-      <f7-nav-left>
+    <f7-navbar :sliding="false" title="Dashboard">
+      <template v-slot:left>
         <f7-link
           icon-ios="f7:menu"
           icon-aurora="f7:menu"
           icon-md="material:menu"
           panel-open="left"
         ></f7-link>
-      </f7-nav-left>
-      <f7-nav-title sliding>Dashboard</f7-nav-title>
+      </template>
     </f7-navbar>
 
     <f7-swiper id="Charts" pagination>
@@ -75,7 +74,6 @@
         </template>
       </f7-list-item>
     </f7-list>
-
   </f7-page>
 </template>
 <style scoped>

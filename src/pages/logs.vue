@@ -1,16 +1,10 @@
 <template>
   <f7-page name="logs" ptr @ptr:refresh="fetchData">
-    <f7-navbar>
-      <f7-nav-left>
-        <f7-link
-          icon-ios="f7:menu"
-          icon-aurora="f7:menu"
-          icon-md="material:menu"
-          panel-open="left"
-        ></f7-link>
-      </f7-nav-left>
-      <f7-nav-title sliding>Logs</f7-nav-title>
-      <f7-nav-right>
+    <f7-navbar title="Logs">
+      <template v-slot:left>
+        <f7-link icon-ios="f7:menu" icon-aurora="f7:menu" icon-md="material:menu" panel-open="left"></f7-link>
+      </template>
+      <template v-slot:right>
         <f7-link
           icon-ios="f7:trash"
           icon-aurora="f7:trash"
@@ -18,7 +12,7 @@
           class="deletePopover"
           @click="openDeletePopover"
         ></f7-link>
-      </f7-nav-right>
+      </template>
     </f7-navbar>
     <f7-list>
       <f7-list-item
@@ -33,12 +27,7 @@
         @swipeout:deleted="removeLog(log.fileName)"
       >
         <f7-swipeout-actions right>
-          <f7-swipeout-button
-            delete
-            confirm-text="Are you sure you want to delete this log?"
-          >
-            Delete
-          </f7-swipeout-button>
+          <f7-swipeout-button delete confirm-text="Are you sure you want to delete this log?">Delete</f7-swipeout-button>
         </f7-swipeout-actions>
       </f7-list-item>
     </f7-list>

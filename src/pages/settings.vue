@@ -1,13 +1,13 @@
 <template>
   <f7-page name="settings" :page-content="false">
     <f7-navbar title="Settings" back-link="Back">
-      <f7-nav-right>
+      <template v-slot:right>
         <f7-link
           icon-only
           icon-f7="checkmark_alt"
           @click="saveData()"
         ></f7-link>
-      </f7-nav-right>
+     </template>
     </f7-navbar>
     <f7-toolbar tabbar labels bottom>
       <f7-link
@@ -745,7 +745,7 @@
             <a
               class="link external"
               href="https://blog.technitium.com/2018/06/configuring-dns-server-for-privacy.html"
-              >Help: Configuring DNS Server For Privacy & Security</a
+              >Help: Configuring DNS Server For Privacy &amp; Security</a
             >
           </p>
         </div>

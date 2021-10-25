@@ -1,17 +1,27 @@
 <template>
   <f7-page name="zones" ptr @ptr:refresh="fetchData" @page:beforeremove="onPageBeforeRemove">
-    <f7-navbar title="Zones" back-link="Back">
-      <f7-nav-right v-if="ios()">
-        <f7-link icon-only icon-f7="plus" @click="newZone()"></f7-link>
-      </f7-nav-right>
+    <f7-navbar title="Zones">
+      <template v-slot:left>
+        <f7-link
+          icon-ios="f7:menu"
+          icon-aurora="material:menu"
+          icon-md="material:menu"
+          panel-open="left"
+        ></f7-link>
+      </template>
+      <template v-slot:right>
+        <f7-link
+          class="if-ios"
+          icon-only
+          icon-f7="plus"
+          icon-aurora="material:add"
+          icon-md="material:add"
+          @click="newZone()"
+        ></f7-link>
+      </template>
     </f7-navbar>
     <template #fixed v-if="!ios()">
-      <f7-fab
-        position="center-bottom"
-        text="New"
-        color="red"
-        @click="newZone()"
-      >
+      <f7-fab position="center-bottom" text="New" color="red" @click="newZone()">
         <f7-icon ios="f7:plus" aurora="f7:plus" md="material:add"></f7-icon>
       </f7-fab>
     </template>
@@ -29,25 +39,19 @@
             <f7-swipeout-button
               delete
               confirm-text="Are you sure you want to delete this zone?"
-            >
-              Delete
-            </f7-swipeout-button>
+            >Delete</f7-swipeout-button>
           </f7-swipeout-actions>
           <f7-swipeout-actions left v-if="!zone.internal">
             <f7-swipeout-button
               v-if="zone.disabled"
               color="green"
               @click="enableZone(zone.name)"
-            >
-              Enable
-            </f7-swipeout-button>
+            >Enable</f7-swipeout-button>
             <f7-swipeout-button
               v-if="!zone.disabled"
               color="orange"
               @click="disableZone(zone.name)"
-            >
-              Disable
-            </f7-swipeout-button>
+            >Disable</f7-swipeout-button>
           </f7-swipeout-actions>
         </f7-list-item>
       </template>
@@ -141,9 +145,7 @@
             @change="zoneServer = $event.target.value"
           ></f7-list-item>
         </f7-list>
-        <f7-block-title v-show="showExternalDNSServerOptions()"
-          >zoneProtocol</f7-block-title
-        >
+        <f7-block-title v-show="showExternalDNSServerOptions()">zoneProtocol</f7-block-title>
         <f7-list v-show="showExternalDNSServerOptions()">
           <f7-list-item
             radio
@@ -225,7 +227,7 @@ export default {
       zoneProtocol,
       zoneForwardServer,
       zoneServer,
-      zoneList
+      zoneList,
     };
   },
   mounted() {
@@ -291,9 +293,9 @@ export default {
     newZone: function () {
       const self = this;
       if (!self.popup) {
-          self.popup = f7.popup.create({
-            el: '.newZonePopup'
-          });
+        self.popup = f7.popup.create({
+          el: ".newZonePopup",
+        });
       }
       self.popup.open();
     },
@@ -329,10 +331,10 @@ export default {
       }
     },
     onPageBeforeRemove() {
-        const self = this;
-        // Destroy popup when page removed
-        if (self.popup) self.popup.destroy();
-      },
+      const self = this;
+      // Destroy popup when page removed
+      if (self.popup) self.popup.destroy();
+    },
   },
 };
 </script>

@@ -1,24 +1,16 @@
 <template>
   <f7-page name="tools">
-    <f7-navbar>
-      <f7-nav-left>
-        <f7-link
-          icon-ios="f7:menu"
-          icon-aurora="f7:menu"
-          icon-md="material:menu"
-          panel-open="left"
-        ></f7-link>
-      </f7-nav-left>
-      <f7-nav-title sliding>Tools</f7-nav-title>
+    <f7-navbar title="Tools">
+      <template v-slot:left>
+        <f7-link icon-ios="f7:menu" icon-aurora="f7:menu" icon-md="material:menu" panel-open="left"></f7-link>
+      </template>
     </f7-navbar>
 
     <f7-block-title>Caching</f7-block-title>
     <flush-cache></flush-cache>
 
     <f7-block-title>Blocklist</f7-block-title>
-    <blocklists-temp-disable
-      :disableBlockingTill="settings.temporaryDisableBlockingTill"
-    ></blocklists-temp-disable>
+    <blocklists-temp-disable :disableBlockingTill="settings.temporaryDisableBlockingTill"></blocklists-temp-disable>
 
     <f7-block-title>Settings</f7-block-title>
     <f7-list>
