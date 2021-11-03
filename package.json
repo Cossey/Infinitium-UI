@@ -20,6 +20,7 @@
     "Samsung >= 5"
   ],
   "dependencies": {
+    "@imengyu/vue3-context-menu": "^1.0.8",
     "dom7": "^3.0.0",
     "framework7": "^6.0.7",
     "framework7-icons": "^3.0.1",
