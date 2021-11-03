@@ -6,15 +6,15 @@
     <f7-toolbar position="bottom">
       <f7-link
         @click="downloadLog"
-        icon-ios="f7:download_circle"
         icon-aurora="material:download"
         icon-md="material:download"
+        :text="$theme.ios ? 'Download' : ''"
       ></f7-link>
       <f7-link
         @click="deleteLog"
-        icon-ios="f7:trash"
         icon-aurora="material:delete"
         icon-md="material:delete"
+        :text="$theme.ios ? 'Delete' : ''"
       ></f7-link>
     </f7-toolbar>
     <f7-block>
@@ -28,8 +28,7 @@
 }
 </style>
 <script>
-import api from "../js/api";
-import { f7, f7ready, theme, f7router } from "framework7-vue";
+import { f7, f7ready } from "framework7-vue";
 import { ref } from "vue";
 
 export default {
@@ -38,7 +37,6 @@ export default {
 
     return {
       log,
-      theme,
     };
   },
   props: {
@@ -52,7 +50,7 @@ export default {
   },
   methods: {
     fetchData: function (done) {
-      api
+      this.$api
         .getLog(this.file)
         .then((fileData) => {
           this.log = fileData;
@@ -66,7 +64,7 @@ export default {
         "Are you sure you want to delete this log?",
         "Delete Log",
         () => {
-          api.get("deleteLog", [["log", this.file]]).then(() => {
+          this.$api.get("deleteLog", [["log", this.file]]).then(() => {
             f7.emit("logDeleted");
             this.f7router.back();
           });
@@ -74,7 +72,7 @@ export default {
       );
     },
     downloadLog: function () {
-      api.downloadLog(this.file);
+      this.$api.downloadLog(this.file);
     },
   },
 };
