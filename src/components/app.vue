@@ -4,92 +4,89 @@
     <f7-panel left cover :visible-breakpoint="960">
       <f7-view class="view-left">
         <f7-page>
-          <f7-navbar title="Technitium DNS"></f7-navbar>
+          <f7-navbar title="Technitium DNS">
+          </f7-navbar>
           <f7-list>
-            <f7-list-item
-              link="/"
-              view=".view-main"
-              panel-close
-              title="Dashboard"
-            ></f7-list-item>
+            <f7-list-item link="/" view=".view-main" panel-close title="Dashboard">
+              <template #media>
+                <f7-icon ios="f7:gauge" md="material:speed" aurora="material:speed"></f7-icon>
+              </template>
+            </f7-list-item>
           </f7-list>
 
           <f7-list>
-            <f7-list-item
-              link="/zones/"
-              view=".view-main"
-              panel-close
-              title="Zones"
-            ></f7-list-item>
-            <f7-list-item
-              link="/allowed/"
-              view=".view-main"
-              panel-close
-              title="Allowed"
-            ></f7-list-item>
-            <f7-list-item
-              link="/blocked/"
-              view=".view-main"
-              panel-close
-              title="Blocked"
-            ></f7-list-item>
-            <f7-list-item
-              link="/cache/"
-              view=".view-main"
-              panel-close
-              title="Cache"
-            ></f7-list-item>
+            <f7-list-item link="/zones/" view=".view-main" panel-close title="Zones">
+              <template #media>
+                <f7-icon ios="f7:shield_fill" md="material:shield" aurora="material:shield"></f7-icon>
+              </template>
+            </f7-list-item>
+            <f7-list-item link="/allowed/" view=".view-main" panel-close title="Allowed">
+              <template #media>
+                <f7-icon
+                  ios="f7:checkmark_shield_fill"
+                  md="material:gpp_good"
+                  aurora="material:gpp_good"
+                ></f7-icon>
+              </template>
+            </f7-list-item>
+            <f7-list-item link="/blocked/" view=".view-main" panel-close title="Blocked">
+              <template #media>
+                <f7-icon ios="f7:xmark_shield_fill" md="material:gpp_bad" aurora="material:gpp_bad"></f7-icon>
+              </template>
+            </f7-list-item>
+            <f7-list-item link="/cache/" view=".view-main" panel-close title="Cache">
+              <template #media>
+                <f7-icon ios="f7:bolt" md="material:bolt" aurora="material:bolt"></f7-icon>
+              </template>
+            </f7-list-item>
           </f7-list>
 
           <f7-list>
-            <f7-list-item
-              link="/settings/"
-              view=".view-main"
-              panel-close
-              title="Settings"
-            ></f7-list-item>
-            <f7-list-item
-              link="/dhcp/"
-              view=".view-main"
-              panel-close
-              title="DHCP"
-            ></f7-list-item>
-            <f7-list-item
-              link="/apps/"
-              view=".view-main"
-              panel-close
-              title="Apps"
-            ></f7-list-item>
+            <f7-list-item link="/settings/" view=".view-main" panel-close title="Settings">
+              <template #media>
+                <f7-icon ios="f7:gear" md="material:settings" aurora="material:settings"></f7-icon>
+              </template>
+            </f7-list-item>
+            <f7-list-item link="/dhcp/" view=".view-main" panel-close title="DHCP">
+              <template #media>
+                <f7-icon ios="f7:desktopcomputer" md="material:computer" aurora="material:computer"></f7-icon>
+              </template>
+            </f7-list-item>
+            <f7-list-item link="/apps/" view=".view-main" panel-close title="Apps">
+              <template #media>
+                <f7-icon ios="f7:app" md="material:apps" aurora="material:apps"></f7-icon>
+              </template>
+            </f7-list-item>
           </f7-list>
 
           <f7-list>
-            <f7-list-item
-              link="/tools/"
-              view=".view-main"
-              panel-close
-              title="Tools"
-            ></f7-list-item>
-            <f7-list-item
-              link="/client/"
-              view=".view-main"
-              panel-close
-              title="DNS Client"
-            ></f7-list-item>
-            <f7-list-item
-              link="/logs/"
-              title="Logs"
-              view=".view-main"
-              panel-close
-            ></f7-list-item>
+            <f7-list-item link="/tools/" view=".view-main" panel-close title="Tools">
+              <template #media>
+                <f7-icon ios="f7:hammer_fill" md="material:handyman" aurora="material:handyman"></f7-icon>
+              </template>
+            </f7-list-item>
+            <f7-list-item link="/client/" view=".view-main" panel-close title="DNS Client">
+              <template #media>
+                <f7-icon ios="f7:globe" md="material:public" aurora="material:public"></f7-icon>
+              </template>
+            </f7-list-item>
+            <f7-list-item link="/logs/" title="Logs" view=".view-main" panel-close>
+              <template #media>
+                <f7-icon
+                  ios="f7:doc_plaintext"
+                  md="material:description"
+                  aurora="material:description"
+                ></f7-icon>
+              </template>
+            </f7-list-item>
           </f7-list>
 
           <f7-list>
-            <f7-list-item
-              link="/about/"
-              view=".view-main"
-              panel-close
-              title="About"
-            ></f7-list-item>
+            <f7-list-item link="/about/" view=".view-main" panel-close title="About">
+              <template #media>
+                <f7-icon ios="f7:question_circle_fill" md="material:help" aurora="material:help"></f7-icon>
+              </template>
+            </f7-list-item>
           </f7-list>
 
           <template v-slot:fixed>
@@ -128,10 +125,10 @@
     <f7-login-screen id="my-login-screen">
       <f7-view>
         <f7-page login-screen>
-          <f7-login-screen-title
-            ><img src="@/assets/logo.png" /><br />
-            Login</f7-login-screen-title
-          >
+          <f7-login-screen-title>
+            <img src="@/assets/logo.png" />
+            <br />Login
+          </f7-login-screen-title>
           <f7-list form>
             <f7-list-input
               type="text"
@@ -150,7 +147,7 @@
           </f7-list>
           <f7-list>
             <f7-list-button title="Login" @click="doLogin()"></f7-list-button>
-            <f7-block-footer> Forgot Password? </f7-block-footer>
+            <f7-block-footer>Forgot Password?</f7-block-footer>
           </f7-list>
         </f7-page>
       </f7-view>
@@ -244,9 +241,9 @@ export default {
       // App routes
       routes: routes,
       // Register service worker
-      serviceWorker: {
-        path: "/service-worker.js",
-      },
+      // serviceWorker: {
+      //   path: "/service-worker.js",
+      // },
       touch: {
         tapHold: true,
       },

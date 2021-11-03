@@ -161,6 +161,88 @@ export default {
             });
         });
     },
+    get2retry() {
+        store.state.failedRequests.all();
+    },
+    get2(verb, params) {
+        var token = store.state.token;
+
+        var promise = new Promise(function (resolve, reject) {
+            var request = {
+                url: url,
+                method: 'GET',
+                timeout: 8000,
+                dataType: 'json',
+            }
+
+            f7.request(request).then(function (res) {
+                switch (res.data.status) {
+                    case 'ok':
+                        resolve(res.data.response);
+                        return;
+                    case 'error':
+                        reject(Error(res.data.errorMessage));
+                        f7.dialog.alert(res.data.errorMessage, "Error");
+                        return;
+                    case 'invalid-token':
+                        store.dispatch('addFailedRequest', promise);
+                        doInitialLogin();
+
+
+                    // f7.once("loggedIn")
+                    // var ls = f7.loginScreen.create({ el: '#my-login-screen' });
+                    //     var retry = {
+                    //         'verb': verb,
+                    //         'params': params,
+                    //         'resolve': resolve,
+                    //         'reject': reject
+                    //     }
+                    //     store.dispatch('setRetryRequest', retry);
+                    //     ls.open();
+                    //     break;
+                }
+            }, function (err) {
+
+            });
+
+
+        });
+        return promise;
+    },
+    post(verb, params, data) {
+        var self = this;
+
+        var promise = new Promise(function (resolve, reject) {
+            var url = self.buildUrl(verb, params);
+
+            var request = {
+                url: url,
+                method: 'POST',
+                timeout: 8000,
+                dataType: 'application/json',
+                data: data,
+                contentType: 'application/x-www-form-urlencoded',
+                processData: false,
+            }
+
+            f7.request(request).then(function (result) {
+                var res = JSON.parse(result.data);
+                switch (res.status) {
+                    case 'ok':
+                        resolve(res.response);
+                        return;
+                    case 'error':
+                        reject(Error(res.errorMessage));
+                        f7.dialog.alert(res.errorMessage, "Error");
+                        return;
+                    case 'invalid-token':
+                        store.dispatch('addFailedRequest', promise);
+                        doInitialLogin();
+                }
+            });
+        });
+        return promise;
+    },
     get(verb, params, pResolve, pReject) {
         var token = store.state.token;
         var self = this;
@@ -178,6 +260,8 @@ export default {
             } else {
                 var url = self.buildUrl(verb, params);
                 console.log("REQUEST: ", url);
+
+
                 f7.request.get(url, (res) => {
                     var data = JSON.parse(res);
                     switch (data.status) {
@@ -215,18 +299,28 @@ export default {
                 f7.dialog.alert(data.errorMessage, 'Login');
             } else {
                 f7.store.dispatch('token', data.token);
+                f7.store.dispatch('user', user);
+                this.get("getDnsSettings").then((res) => {
+                    f7.store.dispatch('domain', res.dnsServerDomain);
+                });
                 this.getRetry();
                 f7.loginScreen.close();
             }
         });
     },
     doInitialLogin() {
-        var ls = f7.loginScreen.create({ el: '#my-login-screen' });
-
         var token = store.state.token;
         if (token == "") {
+            var ls = f7.loginScreen.create({ el: '#my-login-screen' });
             ls.open();
         }
+    },
+    doLogout() {
+        this.get("logout").then((data) => {
+            f7.store.dispatch('token', "");
+            f7.store.dispatch('user', "");
+            this.doInitialLogin();
+        });
     },
     delete(verb, apiKey, arrKey, val, array) {
         this.get("delete" + verb, [[apiKey, val]]).then((data) => {
