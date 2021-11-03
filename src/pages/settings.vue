@@ -1,10 +1,12 @@
 <template>
   <f7-page name="settings" :page-content="false">
-    <f7-navbar title="Settings" back-link="Back">
+    <f7-navbar title="Settings">
       <template v-slot:right>
         <f7-link
-          icon-only
-          icon-f7="checkmark_alt"
+          :icon-only="!$theme.ios"
+          :text="$theme.ios ? 'Save' : ''"
+          icon-md="material:check"
+          icon-aurora="material:check"
           @click="saveData()"
         ></f7-link>
      </template>
@@ -54,8 +56,8 @@
         icon-md="material:description"
       ></f7-link>
     </f7-toolbar>
-    <f7-tabs ref="settingInputs">
-      <f7-tab id="server" class="page-content" tab-active>
+    <f7-tabs>
+      <f7-tab id="server" class="page-content validate-forms" tab-active>
         <f7-block-title>DNS Server</f7-block-title>
         <f7-list no-hairlines-md>
           <f7-list-input
@@ -249,7 +251,7 @@
         </f7-list>
       </f7-tab>
 
-      <f7-tab id="dns" class="page-content">
+      <f7-tab id="dns" class="page-content validate-forms">
         <f7-block-title>Optional DNS Protocols</f7-block-title>
         <div class="block">
           <p>
@@ -440,7 +442,7 @@
             >
           </p>
         </div>
-        <f7-list no-hairlines-md>
+        <f7-list no-hairlines-md class="validate-forms">
           <f7-list-item
             checkbox
             title="Enable Blocking"
@@ -459,7 +461,7 @@
           </f7-block-footer>
         </f7-list>
 
-        <f7-list no-hairlines-md>
+        <f7-list no-hairlines-md class="validate-forms">
           <f7-list-item title="Blocking type" ref="blockingTypeSS" smart-select>
             <select name="BlockingType" v-model="blockingType">
               <option value="AnyAddress">Any Address</option>
@@ -500,7 +502,7 @@
             </p>
           </f7-block-footer>
         </f7-list>
-        <f7-list no-hairlines-md>
+        <f7-list no-hairlines-md class="validate-forms">
           <f7-list-input
             label="Update Interval"
             type="text"
@@ -523,7 +525,7 @@
         ></blocklists-temp-disable>
       </f7-tab>
 
-      <f7-tab id="cache" class="page-content">
+      <f7-tab id="cache" class="page-content validate-forms">
         <f7-block-title>Stale</f7-block-title>
         <div class="block">
           <p>
@@ -664,7 +666,7 @@
         </f7-list>
       </f7-tab>
 
-      <f7-tab id="network" class="page-content">
+      <f7-tab id="network" class="page-content validate-forms">
         <f7-block-title>Proxy</f7-block-title>
         <div class="block">
           <p>
@@ -774,7 +776,7 @@
         </f7-list>
       </f7-tab>
 
-      <f7-tab id="logging" class="page-content">
+      <f7-tab id="logging" class="page-content validate-forms">
         <f7-block-title>Logging</f7-block-title>
         <f7-list no-hairlines-md>
           <f7-list-item
@@ -854,8 +856,7 @@
   </f7-page>
 </template>
 <script>
-import api from "@/js/api";
-import { f7, f7ready, theme } from "framework7-vue";
+import { f7, f7ready } from "framework7-vue";
 import { ref } from "vue";
 import regex from "@/js/regex";
 import BlocklistsSelector from "@/components/blocklists-selector.vue";
@@ -1115,9 +1116,6 @@ export default {
   },
   methods: {
     ...regex,
-    ios: function () {
-      return theme.ios;
-    },
     addToForwarders: function (servers) {
       var serverList = servers.join(",");
       serverList = serverList.replace(/,/g, "\n");
@@ -1138,27 +1136,16 @@ export default {
       this.settings.blockListUrls = list;
     },
     updateBlockLists: function () {
-      api.get("forceUpdateBlockLists").then((res) => {
+      this.$api.get("forceUpdateBlockLists").then((res) => {
         f7.dialog.alert("Block Lists Updated");
       });
     },
-    backupSettings: function () {
-      var url = api.buildUrl("backupSettings", [
-        ["dnsSettings", true],
-        ["logSettings", true],
-      ]);
-
-      window.location.replace(url);
-    },
-    restoreSettings: function () {
-      f7.dialog.alert("Restore");
-    },
     saveData: function () {
-      if (f7.input.validateInputs(this.$refs.settingInputs.$el)) {
-        api
+      if (f7.input.validateInputs(".validate-forms")) {
+        this.$api
           .get(
             "setDnsSettings",
-            api.serializeParams(this.settings, [
+            this.$api.serializeParams(this.settings, [
               "version",
               "blockListNextUpdatedOn",
             ])
@@ -1174,7 +1161,7 @@ export default {
       }
     },
     fetchData: function (done) {
-      api.get("getDnsSettings").then((data) => {
+      this.$api.get("getDnsSettings").then((data) => {
         this.settings = data;
 
         f7.store.dispatch('domain', data.dnsServerDomain);
