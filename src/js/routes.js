@@ -8,6 +8,11 @@ import DhcpPage from '../pages/dhcp.vue';
 import DhcpScopesPage from '../pages/dhcp-scopes.vue';
 import DhcpLeasesPage from '../pages/dhcp-leases.vue';
 
+import AppsPage from '../pages/apps.vue';
+import AppsConfigPage from '../pages/apps-installed-config.vue';
+import AppsInstalledPage from '../pages/apps-installed.vue';
+import AppsStorePage from '../pages/apps-store.vue';
+
 import SettingsPage from '../pages/settings.vue';
 import SettingsBackupPage from '../pages/settings-backup.vue';
 import SettingsRestorePage from '../pages/settings-restore.vue';
@@ -142,6 +147,30 @@ var routes = [
         path: '/scopes/',
         id: 'scopes',
         component: DhcpScopesPage,
+      }
+    ]
+  },
+  {
+    path: '/apps/',
+    component: AppsPage,
+    tabs: [
+      {
+        path: '/',
+        id: 'installed',
+        component: AppsInstalledPage,
+      },
+      {
+        path: '/store/',
+        id: 'store',
+        component: AppsStorePage,
+      }
+    ],
+    routes: [
+      {
+        path: ':appName/config',
+        popup: {
+          component: AppsConfigPage,
+        }
       }
     ]
   },
