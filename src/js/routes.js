@@ -180,13 +180,15 @@ var routes = [
   },
   {
     path: '/client/',
-    component: DNSClientPage
-  },
-  {
-    path: '/client/results/',
-    popup: {
-      component: DNSClientResultsPage
-    }
+    component: DNSClientPage,
+    routes: [
+      {
+        path: 'results/',
+        popup: {
+          component: DNSClientResultsPage,
+        }
+      }
+    ]
   },
   {
     path: '/zones/view/:zoneName/',
