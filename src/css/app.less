@@ -88,3 +88,37 @@
   content: '';
   z-index: 6000;
 }
+
+.mx-context-menu-host {
+  z-index: 9999;
+
+  .mx-context-menu {
+    border: var(--f7-text-color) solid 1px;
+    background-color: var(--f7-sheet-bg-color);
+    border-radius: 0;
+    padding: 9px 0;
+  }
+  
+  .mx-context-menu-item {
+    cursor: pointer;
+
+    .icon {
+      color: var(--f7-text-color);
+      vertical-align: baseline;
+      width: 0;
+    }
+
+    .text {
+      color: var(--f7-text-color);
+    }
+
+    &:hover:not(&:active) {
+      background-color: var(--f7-theme-color-tint);
+    }
+
+    &:active {
+      background-color: var(--f7-theme-color);
+    }
+  }
+}
+
