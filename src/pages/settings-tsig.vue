@@ -2,7 +2,7 @@
   <f7-popup>
     <f7-view>
       <f7-page>
-        <f7-navbar :title="(typeof this.inIndex === 'undefined' ? 'New' : 'Edit') + ' TSIG'">
+        <f7-navbar :title="(typeof this.inIndex === 'undefined' ? 'New' : 'Edit') + ' Key'">
           <template v-slot:left>
             <f7-link popup-close>Cancel</f7-link>
           </template>
@@ -13,7 +13,14 @@
           </template>
         </f7-navbar>
         <f7-list>
-          <f7-list-input label="Key Name" type="text" v-model:value="tsig.keyName" />
+          <f7-list-input 
+            ref="keyName"
+            label="Key Name" 
+            type="text" 
+            v-model:value="tsig.keyName"
+            required
+            error-message="A Key Name is required."
+          />
           <f7-list-input
             label="Shared Secret"
             type="text"
@@ -34,9 +41,14 @@
           </f7-list-item>
           <f7-block-footer>
             <p>
-              If the <i>Shared Secret</i> is empty, then the DNS Server will auto generate a strong key.
+              If the
+              <i>Shared Secret</i> is empty the DNS Server will auto generate a strong key.
             </p>
           </f7-block-footer>
+        </f7-list>
+
+        <f7-list no-hairlines-md v-if="typeof this.inIndex !== 'undefined'">
+          <f7-list-button @click="deleteTsig()" color="red" title="Delete Key" />
         </f7-list>
       </f7-page>
     </f7-view>
@@ -57,12 +69,10 @@ export default {
     index: null
   }),
   props: {
+    keyNames: Object,
     inIndex: Number,
     inTsig: Object,
     f7router: Object,
-  },
-  computed: {
-
   },
   methods: {
     ...regex,
@@ -84,7 +94,18 @@ export default {
 
     },
     updateTsig() {
-      f7.emit("tsigUpdated", { index: this.index, tsig: this.tsig });
+      if (this.keyNames.includes(this.tsig.keyName)) {
+        f7.dialog.alert("The Key Name already exists. Please choose another one.");
+        return;
+      }
+
+      if (f7.input.validateInputs(this.$refs.keyName.$el)) {
+        f7.emit("tsigUpdated", { index: this.index, tsig: this.tsig });
+        f7.popup.close();
+      }
+    },
+    deleteTsig() {
+      f7.emit("tsigDeleted", this.index);
       f7.popup.close();
     },
   },

@@ -432,22 +432,42 @@
           </f7-block-footer>
         </f7-list>
 
-        <f7-block-title>TSIG</f7-block-title>
-        <f7-list media-list>
-          <f7-list-button
-            title="Add New"
-            @click="addTsigKey()"
+        <f7-block-title>TSIG Keys</f7-block-title>
+        <f7-block class="no-margin">
+          <f7-row>
+            <f7-col width="50" medium="20">
+              <f7-button color="blue" @click="addTsigKey">Add Key</f7-button>
+            </f7-col>
+            <f7-col width="50" medium="20">
+              <f7-button color="red" @click="clearTsigKeys">Clear Keys</f7-button>
+            </f7-col>
+            <f7-col width="0" medium="20" />
+            <f7-col width="0" medium="20" />
+            <f7-col width="0" medium="20" />
+          </f7-row>
+        </f7-block>
+
+        <f7-list media-list v-if="settings.tsigKeys && settings.tsigKeys.length > 0">
+          <f7-list-item 
+            v-for="(tsig, index) in settings.tsigKeys" :key="tsig"
+            :title="tsig.keyName"
+            :text="tsig.sharedSecret"
+            :footer="tsig.algorithmName"
+            link="#"
+            @click="(e) => editTsigKey(index, tsig)"
           />
-          <template v-for="(tsig, index) in settings.tsigKeys" :key="tsig">
-            <f7-list-item 
-              :title="tsig.keyName"
-              :text="tsig.sharedSecret"
-              :footer="tsig.algorithmName"
-              link="#"
-              @click="(e) => editTsigKey(index, tsig)"
-            />
-          </template>
+          <f7-block-footer>
+            <p>
+              You will need to configure these TSIG keys names for zone transfer in the zone options and in the secondary zone SOA record options separately.
+            </p>
+          </f7-block-footer>
         </f7-list>
+        <f7-block v-else class="text-align-center">
+          <p>
+            There are no TSIG keys. Create one by clicking <i>Add Key</i> above.
+          </p>
+        </f7-block>
+
       </f7-tab>
 
       <f7-tab id="blocklist" class="page-content">
@@ -920,6 +940,7 @@ export default {
       this.fetchData();
 
       f7.on("tsigUpdated", this.updateTsig);
+      f7.on("tsigDeleted", this.deleteTsig);
     });
   },
   props: {
@@ -1166,15 +1187,29 @@ export default {
       this.settings.blockListUrls = list;
     },
     addTsigKey: function () {
-      this.f7router.navigate("/settings/tsig/");
+      this.f7router.navigate("/settings/tsig/", {
+        props: {
+          keyNames: this.settings.tsigKeys.map((key) => key.keyName),
+        }
+      });
     },
     editTsigKey: function (index, tsig) {
       this.f7router.navigate("/settings/tsig/", {
         props: {
           inIndex: index,
           inTsig: tsig,
+          keyNames: this.settings.tsigKeys.map(key => key.keyName).filter(x => x !== tsig.keyName),
         },
       });
+    },
+    clearTsigKeys: function () {
+      f7.dialog.confirm(
+        "Are you sure you want to clear all TSIG keys?",
+        "Clear TSIG Keys",
+        () => {
+          this.settings.tsigKeys = [];
+        }
+      );
     },
     updateBlockLists: function () {
       this.$api.get("forceUpdateBlockLists").then((res) => {
@@ -1190,19 +1225,23 @@ export default {
         ]);
 
         if (this.settings.tsigKeys != null) {
-          var tsigUp = "";
-          for (var i = 0; i < this.settings.tsigKeys.length; i++) {
-            var key = this.settings.tsigKeys[i];
-            tsigUp +=
-              key.keyName +
-              "|" +
-              key.sharedSecret +
-              "|" +
-              key.algorithmName +
-              "|";
+          if (this.settings.tsigKeys.length > 0) {
+            var tsigUp = "";
+            for (var i = 0; i < this.settings.tsigKeys.length; i++) {
+              var key = this.settings.tsigKeys[i];
+              tsigUp +=
+                key.keyName +
+                "|" +
+                key.sharedSecret +
+                "|" +
+                key.algorithmName +
+                "|";
+            }
+            tsigUp = tsigUp.substring(0, tsigUp.length - 1);
+            params.push(["tsigKeys", tsigUp]);
+          } else {
+            params.push(["tsigKeys", "false"]);
           }
-          tsigUp = tsigUp.substring(0, tsigUp.length - 1);
-          params.push(["tsigKeys", tsigUp]);
         }
 
         this.$api.get("setDnsSettings", params).then((res) => {
@@ -1236,6 +1275,9 @@ export default {
       } else {
         this.settings.tsigKeys[tsig.index] = tsig.tsig;
       }
+    },
+    deleteTsig: function (index) {
+      this.settings.tsigKeys.splice(index, 1);
     },
     fetchData: function (done) {
       this.$api.get("getDnsSettings").then((data) => {
