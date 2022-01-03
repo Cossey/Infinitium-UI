@@ -43,6 +43,9 @@
             </template>
           </f7-list-item>
         </template>
+        <f7-block-footer class="text-align-center">
+          <p>{{ apps.length }} items</p>
+        </f7-block-footer>
       </f7-list>
       <f7-block v-else class="text-align-center">
         <p>

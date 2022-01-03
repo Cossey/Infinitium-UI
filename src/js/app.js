@@ -11,7 +11,7 @@ import Framework7Vue, { registerComponents } from 'framework7-vue/bundle';
 import 'framework7/framework7-bundle.css';
 
 // Vue 3 Context Menu
-import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
+//import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
 import ContextMenu from '@imengyu/vue3-context-menu'
 
 // Import Icons and App Custom Styles

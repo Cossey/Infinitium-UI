@@ -1,10 +1,16 @@
 <template>
   <f7-page name="user">
-    <f7-navbar :title="user" back-link="Back">
-      <template v-slot:right>
-        <f7-link @click="logout">Logout</f7-link>
+    <f7-navbar :title="user">
+      <template v-slot:left>
+        <f7-link
+          icon-ios="f7:menu"
+          icon-aurora="material:menu"
+          icon-md="material:menu"
+          panel-open="left"
+        ></f7-link>
       </template>
     </f7-navbar>
+    <f7-block-title>Change Password</f7-block-title>
     <f7-list ref="changePassword">
       <f7-list-input
         label="New Password"
@@ -22,9 +28,11 @@
         error-message="Passwords do not match"
         :pattern="regexEscape(password.new)"
       >
-        <!-- :onValidate="(isValid) => this.validatePassword(isValid)" -->
       </f7-list-input>
       <f7-list-button @click="changePassword" title="Change Password"></f7-list-button>
+    </f7-list>
+    <f7-list no-hairlines-md>
+      <f7-list-button @click="logout" color="red" title="Logout"></f7-list-button>
     </f7-list>
   </f7-page>
 </template>

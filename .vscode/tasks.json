@@ -4,10 +4,7 @@
 		{
 			"type": "npm",
 			"script": "build",
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
+			"group": "build",
 			"problemMatcher": [],
 			"label": "Build",
 			"detail": "cross-env NODE_ENV=production node ./build/build.js"
@@ -34,11 +31,15 @@
 					"/E",
 					"/Y",
 					"${workspaceFolder}\\www\\*.*",
-					"F:\\Documents\\GitHub\\DnsServerPortable\\www"
+					"F:\\Documents\\DnsServerPortable\\www"
 				]
 			},
 			"problemMatcher": [],
-			"dependsOn": "Build"
+			"dependsOn": "Build",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
 		}
 	]
 }

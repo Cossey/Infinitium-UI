@@ -10,41 +10,46 @@
       footer="00.00 KB"
     ></f7-list-item>
   </f7-list>
-  <f7-list media-list v-else>
-    <template v-if="storeApps.length > 0">
-      <f7-list-item
-        v-for="app in storeApps"
-        :key="app.name"
-        :title="app.name"
-        :subtitle="'Version ' + app.version"
-        :text="app.description"
-        :footer="app.size"
-        :badge="appBadge(app)"
-        :badge-color="appBadgeColour(app)"
-        link="#"
-        @click="storeMenu(app)"
-        no-chevron
-        :swipeout="!$device.desktop"
-        @swipeout:deleted="uninstallApp(app.name)"
-      >
-        <template v-if="!$device.desktop">
-          <f7-swipeout-actions left>
-            <f7-swipeout-button color="orange" @click="updateApp(app)">Update</f7-swipeout-button>
-          </f7-swipeout-actions>
-          <f7-swipeout-actions right>
-            <f7-swipeout-button
-              delete
-              confirm-text="Are you sure you want to uninstall this app?"
-            >Uninstall</f7-swipeout-button>
-          </f7-swipeout-actions>
-        </template>
-      </f7-list-item>
-    </template>
-    <template v-else>
-      <f7-list-item title="No apps found" text="Could not find any apps on the store."></f7-list-item>
-      <f7-list-button title="Try again" @click="refetchData"></f7-list-button>
-    </template>
-  </f7-list>
+  <template v-else>
+    <f7-list media-list>
+      <template v-if="storeApps.length > 0">
+        <f7-list-item
+          v-for="app in storeApps"
+          :key="app.name"
+          :title="app.name"
+          :subtitle="'Version ' + app.version"
+          :text="app.description"
+          :footer="app.size"
+          :badge="appBadge(app)"
+          :badge-color="appBadgeColour(app)"
+          link="#"
+          @click="storeMenu(app)"
+          no-chevron
+          :swipeout="!$device.desktop"
+          @swipeout:deleted="uninstallApp(app.name)"
+        >
+          <template v-if="!$device.desktop">
+            <f7-swipeout-actions left>
+              <f7-swipeout-button color="orange" @click="updateApp(app)">Update</f7-swipeout-button>
+            </f7-swipeout-actions>
+            <f7-swipeout-actions right>
+              <f7-swipeout-button
+                delete
+                confirm-text="Are you sure you want to uninstall this app?"
+              >Uninstall</f7-swipeout-button>
+            </f7-swipeout-actions>
+          </template>
+        </f7-list-item>
+      </template>
+      <template v-else>
+        <f7-list-item title="No apps found" text="Could not find any apps on the store."></f7-list-item>
+        <f7-list-button title="Try again" @click="refetchData"></f7-list-button>
+      </template>
+    </f7-list>
+    <f7-block-footer class="text-align-center" v-if="storeApps.length > 0">
+      <p>{{ storeApps.length }} items</p>
+    </f7-block-footer>
+  </template>
 </template>
 
 <script>

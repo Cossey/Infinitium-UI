@@ -247,6 +247,9 @@ export default {
       touch: {
         tapHold: true,
       },
+      smartSelect: {
+        closeOnSelect: true
+      },
     };
 
     // Login screen data
@@ -291,12 +294,6 @@ export default {
           f7.$("html").removeClass("theme-dark");
         }
       }
-    },
-    newZone() {
-      var zonePopup = f7.popup.create({
-        el: ".newZonePopup",
-      });
-      zonePopup.open();
     },
   },
 };

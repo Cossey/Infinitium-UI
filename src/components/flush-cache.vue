@@ -1,6 +1,6 @@
 <template>
   <f7-list no-hairlines-md>
-    <f7-list-button @click="flushCache()" title="Flush Cache"> </f7-list-button>
+    <f7-list-button @click="flushCache()" color="red" title="Flush Cache"> </f7-list-button>
   </f7-list>
 </template>
 <script>

@@ -1,6 +1,15 @@
 <template>
   <f7-page name="about">
-    <f7-navbar title="About" back-link="Back"></f7-navbar>
+    <f7-navbar title="About">
+      <template v-slot:left>
+        <f7-link
+          icon-ios="f7:menu"
+          icon-aurora="material:menu"
+          icon-md="material:menu"
+          panel-open="left"
+        ></f7-link>
+      </template>
+    </f7-navbar>
     <f7-block-title>Infinitium UI</f7-block-title>
     <f7-block>
       <p>Copyright &copy; 2021 Stewart Cossey</p>
@@ -8,32 +17,18 @@
     <f7-block-title>Theme</f7-block-title>
     <f7-block>
       <f7-segmented raised tag="p">
-        <f7-button :active="theme === 'auto'" @click="switchTheme('auto')"
-          >Auto</f7-button
-        >
-        <f7-button :active="theme === 'ios'" @click="switchTheme('ios')"
-          >iOS</f7-button
-        >
-        <f7-button :active="theme === 'md'" @click="switchTheme('md')"
-          >Android</f7-button
-        >
-        <f7-button :active="theme === 'aurora'" @click="switchTheme('aurora')"
-          >Desktop</f7-button
-        >
+        <f7-button :active="theme === 'auto'" @click="switchTheme('auto')">Auto</f7-button>
+        <f7-button :active="theme === 'ios'" @click="switchTheme('ios')">iOS</f7-button>
+        <f7-button :active="theme === 'md'" @click="switchTheme('md')">Android</f7-button>
+        <f7-button :active="theme === 'aurora'" @click="switchTheme('aurora')">Desktop</f7-button>
       </f7-segmented>
     </f7-block>
     <f7-block-title>Dark Mode</f7-block-title>
     <f7-block>
       <f7-segmented raised tag="p">
-        <f7-button :active="darkMode === 'auto'" @click="setDarkMode('auto')"
-          >Auto</f7-button
-        >
-        <f7-button :active="darkMode === 'light'" @click="setDarkMode('light')"
-          >Light</f7-button
-        >
-        <f7-button :active="darkMode === 'dark'" @click="setDarkMode('dark')"
-          >Dark</f7-button
-        >
+        <f7-button :active="darkMode === 'auto'" @click="setDarkMode('auto')">Auto</f7-button>
+        <f7-button :active="darkMode === 'light'" @click="setDarkMode('light')">Light</f7-button>
+        <f7-button :active="darkMode === 'dark'" @click="setDarkMode('dark')">Dark</f7-button>
       </f7-segmented>
     </f7-block>
     <f7-block-title>Technitium DNS Server</f7-block-title>
@@ -46,17 +41,14 @@
       <p>Source code available under GNU General Public License v3.0</p>
       <f7-row>
         <f7-col>
-          <f7-button outline external href="https://go.technitium.com/?id=24"
-            >View License</f7-button
-          >
+          <f7-button outline external href="https://go.technitium.com/?id=24">View License</f7-button>
         </f7-col>
         <f7-col>
           <f7-button
             outline
             external
             href="https://github.com/TechnitiumSoftware/DnsServer"
-            >Source Code</f7-button
-          >
+          >Source Code</f7-button>
         </f7-col>
       </f7-row>
     </f7-block>
@@ -65,9 +57,7 @@
       <p>Read the change log to know whats new in this release.</p>
       <f7-row>
         <f7-col>
-          <f7-button outline external href="https://go.technitium.com/?id=23"
-            >View the Change log</f7-button
-          >
+          <f7-button outline external href="https://go.technitium.com/?id=23">View the Change log</f7-button>
         </f7-col>
       </f7-row>
     </f7-block>
@@ -84,8 +74,7 @@
             outline
             external
             href="https://github.com/TechnitiumSoftware/DnsServer/blob/master/APIDOCS.md"
-            >View HTTP API Documentation</f7-button
-          >
+          >View HTTP API Documentation</f7-button>
         </f7-col>
       </f7-row>
     </f7-block>
@@ -93,19 +82,13 @@
     <f7-block>
       <f7-row>
         <f7-col>
-          <f7-button outline external href="mailto:support@technitium.com"
-            >Email</f7-button
-          >
+          <f7-button outline external href="mailto:support@technitium.com">Email</f7-button>
         </f7-col>
         <f7-col>
-          <f7-button outline external href="https://twitter.com/Technitium"
-            >Twitter</f7-button
-          >
+          <f7-button outline external href="https://twitter.com/Technitium">Twitter</f7-button>
         </f7-col>
         <f7-col>
-          <f7-button outline external href="https://blog.technitium.com/"
-            >Blog</f7-button
-          >
+          <f7-button outline external href="https://blog.technitium.com/">Blog</f7-button>
         </f7-col>
       </f7-row>
     </f7-block>
@@ -117,9 +100,7 @@
       </p>
       <f7-row>
         <f7-col>
-          <f7-button outline external href="https://go.technitium.com/?id=35"
-            >Become a Patron Now!</f7-button
-          >
+          <f7-button outline external href="https://go.technitium.com/?id=35">Become a Patron Now!</f7-button>
         </f7-col>
       </f7-row>
     </f7-block>
@@ -136,7 +117,7 @@ export default {
     };
   },
   mounted() {
-    f7ready((f7) => {});
+    f7ready((f7) => { });
   },
   methods: {
     switchTheme(theme) {

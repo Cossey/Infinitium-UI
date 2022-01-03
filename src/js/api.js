@@ -243,6 +243,22 @@ export default {
         });
         return promise;
     },
+    doBatchGet(verbGen, paramGen, arrayList) {
+        var queryList = [];
+        for (let i = 0; i < arrayList.length; i++) {
+            queryList.push({ verb: verbGen(arrayList[i]), params: paramGen(arrayList[i]) });
+        }
+
+        return this.getBatch(queryList);
+    },
+    getBatch(stack) {
+        var self = this;
+        var promises = [];
+        stack.forEach(function (item) {
+            promises.push(self.get(item.verb, item.params));
+        });
+        return Promise.all(promises);
+    },
     get(verb, params, pResolve, pReject) {
         var token = store.state.token;
         var self = this;
@@ -302,6 +318,7 @@ export default {
                 f7.store.dispatch('user', user);
                 this.get("getDnsSettings").then((res) => {
                     f7.store.dispatch('domain', res.dnsServerDomain);
+                    f7.store.dispatch('tsigNames', res.tsigKeys.map(o => o.keyName));
                 });
                 this.getRetry();
                 f7.loginScreen.close();

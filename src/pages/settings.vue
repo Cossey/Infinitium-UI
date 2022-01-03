@@ -1,6 +1,14 @@
 <template>
   <f7-page name="settings" :page-content="false">
     <f7-navbar title="Settings">
+            <template v-slot:left>
+        <f7-link
+          icon-ios="f7:menu"
+          icon-aurora="material:menu"
+          icon-md="material:menu"
+          panel-open="left"
+        ></f7-link>
+      </template>
       <template v-slot:right>
         <f7-link
           :icon-only="!$theme.ios"
@@ -327,13 +335,13 @@
               When using a reverse proxy with the DNS-over-HTTP service, you need to add X-Real-IP header to the proxy request with the IP address of the client to allow the DNS server to know the real IP address of the client originating the request. For example:
               <ul>
                 <li>
-                  nginx
+                  nginx<br>
                   <code>
                     proxy_set_header X-Real-IP $remote_addr;
                   </code>
                 </li>
                 <li>
-                  HAProxy
+                  HAProxy<br>
                   <code>
                     http-request set-header X-Real-IP %[src]
                   </code>
@@ -422,6 +430,23 @@
           <f7-block-footer>
             <p>Enables Delegation Revalidation for recursive resolution.</p>
           </f7-block-footer>
+        </f7-list>
+
+        <f7-block-title>TSIG</f7-block-title>
+        <f7-list media-list>
+          <f7-list-button
+            title="Add New"
+            @click="addTsigKey()"
+          />
+          <template v-for="(tsig, index) in settings.tsigKeys" :key="tsig">
+            <f7-list-item 
+              :title="tsig.keyName"
+              :text="tsig.sharedSecret"
+              :footer="tsig.algorithmName"
+              link="#"
+              @click="(e) => editTsigKey(index, tsig)"
+            />
+          </template>
         </f7-list>
       </f7-tab>
 
@@ -893,7 +918,12 @@ export default {
   mounted() {
     f7ready((f7) => {
       this.fetchData();
+
+      f7.on("tsigUpdated", this.updateTsig);
     });
+  },
+  props: {
+    f7router: Object,
   },
   computed: {
     blockListNextUpdatedOn: {
@@ -1135,6 +1165,17 @@ export default {
       }
       this.settings.blockListUrls = list;
     },
+    addTsigKey: function () {
+      this.f7router.navigate("/settings/tsig/");
+    },
+    editTsigKey: function (index, tsig) {
+      this.f7router.navigate("/settings/tsig/", {
+        props: {
+          inIndex: index,
+          inTsig: tsig,
+        },
+      });
+    },
     updateBlockLists: function () {
       this.$api.get("forceUpdateBlockLists").then((res) => {
         f7.dialog.alert("Block Lists Updated");
@@ -1142,29 +1183,65 @@ export default {
     },
     saveData: function () {
       if (f7.input.validateInputs(".validate-forms")) {
-        this.$api
-          .get(
-            "setDnsSettings",
-            this.$api.serializeParams(this.settings, [
-              "version",
-              "blockListNextUpdatedOn",
-            ])
-          )
-          .then((res) => {
-            savedToast();
-            this.fetchData();
-          });
+        let params = this.$api.serializeParams(this.settings, [
+          "version",
+          "blockListNextUpdatedOn",
+          "tsigKeys",
+        ]);
+
+        if (this.settings.tsigKeys != null) {
+          var tsigUp = "";
+          for (var i = 0; i < this.settings.tsigKeys.length; i++) {
+            var key = this.settings.tsigKeys[i];
+            tsigUp +=
+              key.keyName +
+              "|" +
+              key.sharedSecret +
+              "|" +
+              key.algorithmName +
+              "|";
+          }
+          tsigUp = tsigUp.substring(0, tsigUp.length - 1);
+          params.push(["tsigKeys", tsigUp]);
+        }
+
+        this.$api.get("setDnsSettings", params).then((res) => {
+          savedToast();
+          this.settings = res;
+
+          this.$refs.proxyTypeSS.$el
+            .querySelector(".smart-select")
+            .f7SmartSelect.setValue(this.proxyType);
+          this.$refs.forwarderProtocolSS.$el
+            .querySelector(".smart-select")
+            .f7SmartSelect.setValue(this.forwarderProtocol);
+
+          this.$refs.blockingTypeSS.$el
+            .querySelector(".smart-select")
+            .f7SmartSelect.setValue(this.blockingType);
+
+          this.$refs.recursionSS.$el
+            .querySelector(".smart-select")
+            .f7SmartSelect.setValue(this.recursion);
+        });
       } else {
         f7.dialog.alert(
           "Could not save settings. Please check the settings for any missing or incorrect values."
         );
       }
     },
+    updateTsig: function (tsig) {
+      if (tsig.index == null) {
+        this.settings.tsigKeys.push(tsig.tsig);
+      } else {
+        this.settings.tsigKeys[tsig.index] = tsig.tsig;
+      }
+    },
     fetchData: function (done) {
       this.$api.get("getDnsSettings").then((data) => {
         this.settings = data;
 
-        f7.store.dispatch('domain', data.dnsServerDomain);
+        f7.store.dispatch("domain", data.dnsServerDomain);
 
         this.$refs.proxyTypeSS.$el
           .querySelector(".smart-select")

@@ -1,8 +1,12 @@
 
 import HomePage from '../pages/home.vue';
 import AboutPage from '../pages/about.vue';
+
 import ZonesPage from '../pages/zones.vue';
-import ViewZonePage from '../pages/viewzone.vue';
+import ZonesNewPage from '../pages/zones-new.vue';
+import ZonesViewPage from '../pages/zones-view.vue';
+import ZonesOptionsPage from '../pages/zones-options.vue';
+import ZonesRecordPage from '../pages/zones-record.vue';
 
 import DhcpPage from '../pages/dhcp.vue';
 import DhcpScopesPage from '../pages/dhcp-scopes.vue';
@@ -16,14 +20,13 @@ import AppsStorePage from '../pages/apps-store.vue';
 import SettingsPage from '../pages/settings.vue';
 import SettingsBackupPage from '../pages/settings-backup.vue';
 import SettingsRestorePage from '../pages/settings-restore.vue';
+import SettingsTsigPage from '../pages/settings-tsig.vue';
 
 import StatsPage from '../pages/stats.vue';
 
 import DNSClientPage from '../pages/dnsclient.vue';
 import DNSClientResultsPage from '../pages/dnsclient-results.vue';
 
-import DynamicRoutePage from '../pages/dynamic-route.vue';
-import RequestAndLoad from '../pages/request-and-load.vue';
 import NotFoundPage from '../pages/404.vue';
 
 import ToolsPage from '../pages/tools.vue';
@@ -36,7 +39,6 @@ var routes = [
   {
     path: '/',
     component: HomePage,
-    keepAlive: true
   },
   {
     path: '/tools/',
@@ -57,6 +59,12 @@ var routes = [
       {
         path: 'restore/',
         component: SettingsRestorePage,
+      },
+      {
+        path: 'tsig/',
+        popup: {
+          component: SettingsTsigPage,
+        },
       }
     ]
   },
@@ -92,7 +100,17 @@ var routes = [
         component: StatsPage,
         options: {
           props: {
-            statsType: 'topClients'
+            statsType: 'topClients',
+          }
+        }
+      },
+      {
+        path: 'clients/custom/:start/:end/',
+        component: StatsPage,
+        options: {
+          props: {
+            statsType: 'topClients',
+            type: 'custom',
           }
         }
       },
@@ -115,6 +133,16 @@ var routes = [
         },
       },
       {
+        path: 'domains/custom/:start/:end/',
+        component: StatsPage,
+        options: {
+          props: {
+            statsType: 'topDomains',
+            type: 'custom',
+          }
+        },
+      },
+      {
         path: 'blocked/',
         component: StatsPage,
         options: {
@@ -129,6 +157,16 @@ var routes = [
         options: {
           props: {
             statsType: 'topBlockedDomains'
+          }
+        }
+      },
+      {
+        path: 'blocked/custom/:start/:end/',
+        component: StatsPage,
+        options: {
+          props: {
+            statsType: 'topBlockedDomains',
+            type: 'custom',
           }
         }
       },
@@ -177,6 +215,35 @@ var routes = [
   {
     path: '/zones/',
     component: ZonesPage,
+    routes: [
+      {
+        path: 'new/',
+        popup: {
+          component: ZonesNewPage,
+        }
+      },
+      {
+        path: ':zoneName/',
+        routes: [
+          {
+            path: 'view/',
+            component: ZonesViewPage,
+          },
+          {
+            path: 'options/',
+            popup: {
+              component: ZonesOptionsPage,
+            }
+          },
+          {
+            path: 'record/',
+            popup: {
+              component: ZonesRecordPage,
+            }
+          }
+        ]
+      },
+    ]
   },
   {
     path: '/client/',
@@ -189,61 +256,6 @@ var routes = [
         }
       }
     ]
-  },
-  {
-    path: '/zones/view/:zoneName/',
-    component: ViewZonePage
-  },
-  {
-    path: '/dynamic-route/blog/:blogId/post/:postId/',
-    component: DynamicRoutePage,
-  },
-  {
-    path: '/request-and-load/user/:userId/',
-    async: function ({ router, to, resolve }) {
-      // App instance
-      var app = router.app;
-
-      // Show Preloader
-      app.preloader.show();
-
-      // User ID from request
-      var userId = to.params.userId;
-
-      // Simulate Ajax Request
-      setTimeout(function () {
-        // We got user data from request
-        var user = {
-          firstName: 'Vladimir',
-          lastName: 'Kharlampidi',
-          about: 'Hello, i am creator of Framework7! Hope you like it!',
-          links: [
-            {
-              title: 'Framework7 Website',
-              url: 'http://framework7.io',
-            },
-            {
-              title: 'Framework7 Forum',
-              url: 'http://forum.framework7.io',
-            },
-          ]
-        };
-        // Hide Preloader
-        app.preloader.hide();
-
-        // Resolve route to load page
-        resolve(
-          {
-            component: RequestAndLoad,
-          },
-          {
-            props: {
-              user: user,
-            }
-          }
-        );
-      }, 1000);
-    },
   },
   {
     path: '(.*)',

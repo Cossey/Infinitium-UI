@@ -9,8 +9,12 @@ const store = createStore({
     failedRequests: [],
     user: "",
     domain: "",
+    tsigKeyNames: [],
   },
   getters: {
+    tsigNames({state}) {
+      return state.tsigKeyNames;
+    },
     token({ state }) {
       return state.token;
     },
@@ -31,6 +35,9 @@ const store = createStore({
     }
   },
   actions: {
+    tsigNames({state}, tsigNames) {
+      state.tsigKeyNames = tsigNames;
+    },
     domain({state}, domain) {
       state.domain = domain;
     },

@@ -1,5 +1,5 @@
 <template>
-     <f7-page name="apps" :page-content="false">
+  <f7-page name="apps" :page-content="false">
     <f7-navbar title="Apps">
       <template v-slot:left>
         <f7-link
@@ -38,6 +38,6 @@
 </template>
 <script>
 export default {
-    
+
 }
 </script>

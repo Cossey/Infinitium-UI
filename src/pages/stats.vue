@@ -1,60 +1,54 @@
 <template>
-  <f7-page ptr @ptr:refresh="fetchData">
-    <f7-navbar back-link="Dashboard">
-      <f7-nav-title>{{ displayStatsType }} Stats</f7-nav-title>
+  <f7-page :page-content="false">
+    <f7-navbar back-link="Dashboard" :title="displayStatsType + ' Stats'">
+      <f7-subnavbar>
+        <f7-searchbar
+          search-container=".search-list"
+          search-item="tr"
+          search-in=".label-cell"
+          :disable-button="!$theme.aurora"
+        ></f7-searchbar>
+      </f7-subnavbar>
     </f7-navbar>
-    <f7-block-title>Filter</f7-block-title>
-    <f7-list>
-      <f7-list-item title="Period" smart-select>
-        <select name="period" v-model="period">
-          <option value="lastHour" selected>Last Hour</option>
-          <option value="lastDay">Last Day</option>
-          <option value="lastWeek">Last Week</option>
-          <option value="lastMonth">Last Month</option>
-          <option value="lastYear">Last Year</option>
-        </select>
-      </f7-list-item>
-      <f7-list-button
-        v-if="this.period !== this.lastPeriod"
-        title="Refresh"
-        @click="fetchData()"
-      >
-      </f7-list-button>
-      <f7-block-footer v-if="this.period !== this.lastPeriod">
-        <p>
-          You have changed the Period. Refresh the page to see the new stats.
-        </p>
-      </f7-block-footer>
-    </f7-list>
-    <f7-block-title>Results</f7-block-title>
-    <f7-list>
-      <f7-list-item
-        v-for="stat in stats"
-        :key="stat.name"
-        :title="stat.name"
-        :subtitle="stat.domain"
-        :after="stat.hits"
-      ></f7-list-item>
-      <f7-list-item
-        v-if="stats.length === 0"
-        title="There is no stats."
-      ></f7-list-item>
-    </f7-list>
-    <f7-block-footer class="text-align-center">
-      <p>{{ this.count }} items</p></f7-block-footer
-    >
+    <f7-page-content ptr @ptr:refresh="fetchData">
+      <div class="data-table">
+        <table>
+          <thead>
+            <tr v-if="displayStatsType == 'Client'">
+              <th class="label-cell">Client</th>
+              <th class="numeric-cell">Queries</th>
+            </tr>
+            <tr v-else>
+              <th class="label-cell">Domain</th>
+              <th class="numeric-cell">Hits</th>
+            </tr>
+          </thead>
+          <tbody class="search-list searchbar-found">
+            <tr class v-for="stat in stats" :key="stat.name">
+              <td class="label-cell">{{ stat.name }}</td>
+              <td class="numeric-cell">{{ stat.hits }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="searchbar-not-found" v-if="stats.length > 0">
+              <td colspan="2">No search results found.</td>
+            </tr>
+            <tr v-else>
+              <td colspan="2">No results.</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </f7-page-content>
   </f7-page>
 </template>
 <script>
-import api from "@/js/api";
-import { f7, f7ready, theme } from "framework7-vue";
+import { f7ready } from "framework7-vue";
 
 export default {
   data() {
     return {
       stats: [],
-      period: this.type || "lastHour",
-      lastPeriod: this.type || "lastHour",
     };
   },
   mounted() {
@@ -66,6 +60,8 @@ export default {
     statsType: String,
     type: String,
     limit: Number,
+    start: String,
+    end: String,
   },
   computed: {
     count() {
@@ -93,16 +89,16 @@ export default {
     },
   },
   methods: {
-    periodChange(e) {
-      if (this.period !== this.lastPeriod) {
-      }
-    },
     fetchData(done) {
       var params = [["statsType", this.statsType]];
-      if (this.period) params.push(["type", this.period]);
+      if (this.type) params.push(["type", this.type]);
       if (this.limit) params.push(["limit", this.limit]);
 
-      api
+      if (this.type === "custom") {
+        params.push(["start", this.start]);
+        params.push(["end", this.end]);
+      }
+      this.$api
         .get("getTopStats", params)
         .then((res) => {
           console.log("stats" + this.statsTypeProperty);

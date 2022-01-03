@@ -18,7 +18,7 @@
         text="Leases"
         icon-ios="f7:number"
         icon-aurora="material:tag"
-        icon-md="f7:number"
+        icon-md="material:tag"
       ></f7-link>
       <f7-link
         tab-link
@@ -27,7 +27,7 @@
         text="Scopes"
         icon-ios="f7:scope"
         icon-aurora="material:adjust"
-        icon-md="f7:scope"
+        icon-md="material:adjust"
       ></f7-link>
     </f7-toolbar>
     <f7-tabs routable>
