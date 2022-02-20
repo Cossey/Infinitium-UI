@@ -23,18 +23,20 @@ import App from '../components/app.vue';
 import { theme } from 'framework7-vue';
 import { getDevice } from 'framework7';
 import api from "./api";
+import i18n from './i18n';
 
 // Init Framework7-Vue Plugin
 Framework7.use(Framework7Vue);
 
 // Init App
 const app = createApp(App);
-
 app
     .use(ContextMenu)
     .use(theme)
+    .use(i18n)
     .use(api)
     .use(getDevice);
+
 
 app.config.globalProperties.$theme = theme;
 app.config.globalProperties.$api = api;

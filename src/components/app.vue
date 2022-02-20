@@ -4,10 +4,10 @@
     <f7-panel left cover :visible-breakpoint="960">
       <f7-view class="view-left">
         <f7-page>
-          <f7-navbar title="Technitium DNS">
+          <f7-navbar :title="$t('navigation.title')">
           </f7-navbar>
           <f7-list>
-            <f7-list-item link="/" view=".view-main" panel-close title="Dashboard">
+            <f7-list-item link="/" view=".view-main" panel-close :title="$t('navigation.dashboard')">
               <template #media>
                 <f7-icon ios="f7:gauge" md="material:speed" aurora="material:speed"></f7-icon>
               </template>
@@ -15,12 +15,12 @@
           </f7-list>
 
           <f7-list>
-            <f7-list-item link="/zones/" view=".view-main" panel-close title="Zones">
+            <f7-list-item link="/zones/" view=".view-main" panel-close :title="$t('navigation.zones')">
               <template #media>
                 <f7-icon ios="f7:shield_fill" md="material:shield" aurora="material:shield"></f7-icon>
               </template>
             </f7-list-item>
-            <f7-list-item link="/allowed/" view=".view-main" panel-close title="Allowed">
+            <f7-list-item link="/allowed/" view=".view-main" panel-close :title="$t('navigation.allowed')">
               <template #media>
                 <f7-icon
                   ios="f7:checkmark_shield_fill"
@@ -29,12 +29,12 @@
                 ></f7-icon>
               </template>
             </f7-list-item>
-            <f7-list-item link="/blocked/" view=".view-main" panel-close title="Blocked">
+            <f7-list-item link="/blocked/" view=".view-main" panel-close :title="$t('navigation.blocked')">
               <template #media>
                 <f7-icon ios="f7:xmark_shield_fill" md="material:gpp_bad" aurora="material:gpp_bad"></f7-icon>
               </template>
             </f7-list-item>
-            <f7-list-item link="/cache/" view=".view-main" panel-close title="Cache">
+            <f7-list-item link="/cache/" view=".view-main" panel-close :title="$t('navigation.cache')">
               <template #media>
                 <f7-icon ios="f7:bolt" md="material:bolt" aurora="material:bolt"></f7-icon>
               </template>
@@ -42,17 +42,17 @@
           </f7-list>
 
           <f7-list>
-            <f7-list-item link="/settings/" view=".view-main" panel-close title="Settings">
+            <f7-list-item link="/settings/" view=".view-main" panel-close :title="$t('navigation.settings')">
               <template #media>
                 <f7-icon ios="f7:gear" md="material:settings" aurora="material:settings"></f7-icon>
               </template>
             </f7-list-item>
-            <f7-list-item link="/dhcp/" view=".view-main" panel-close title="DHCP">
+            <f7-list-item link="/dhcp/" view=".view-main" panel-close :title="$t('navigation.dhcp')">
               <template #media>
                 <f7-icon ios="f7:desktopcomputer" md="material:computer" aurora="material:computer"></f7-icon>
               </template>
             </f7-list-item>
-            <f7-list-item link="/apps/" view=".view-main" panel-close title="Apps">
+            <f7-list-item link="/apps/" view=".view-main" panel-close :title="$t('navigation.apps')">
               <template #media>
                 <f7-icon ios="f7:app" md="material:apps" aurora="material:apps"></f7-icon>
               </template>
@@ -60,7 +60,7 @@
           </f7-list>
 
           <f7-list>
-            <f7-list-item link="/tools/" view=".view-main" panel-close title="Tools">
+            <f7-list-item link="/tools/" view=".view-main" panel-close :title="$t('navigation.tools')">
               <template #media>
                 <f7-icon ios="f7:hammer_fill" md="material:handyman" aurora="material:handyman"></f7-icon>
               </template>
@@ -70,7 +70,7 @@
                 <f7-icon ios="f7:globe" md="material:public" aurora="material:public"></f7-icon>
               </template>
             </f7-list-item>
-            <f7-list-item link="/logs/" title="Logs" view=".view-main" panel-close>
+            <f7-list-item link="/logs/" :title="$t('navigation.logs')" view=".view-main" panel-close>
               <template #media>
                 <f7-icon
                   ios="f7:doc_plaintext"
@@ -82,7 +82,7 @@
           </f7-list>
 
           <f7-list>
-            <f7-list-item link="/about/" view=".view-main" panel-close title="About">
+            <f7-list-item link="/about/" view=".view-main" panel-close :title="$t('navigation.about')">
               <template #media>
                 <f7-icon ios="f7:question_circle_fill" md="material:help" aurora="material:help"></f7-icon>
               </template>
@@ -219,8 +219,10 @@ import routes from "../js/routes.js";
 import { useStore } from "framework7-vue";
 import store from "../js/store";
 import { getDevice } from "framework7";
+import i18n from './i18n-mixin.js';
 
 export default {
+  mixins: [i18n],
   setup() {
     let theme = localStorage.getItem("theme");
     let darkMode = localStorage.getItem("dark") || "auto";
@@ -241,9 +243,9 @@ export default {
       // App routes
       routes: routes,
       // Register service worker
-      // serviceWorker: {
-      //   path: "/service-worker.js",
-      // },
+      //serviceWorker: (this.$device.cordova || location.hostname === 'localhost') ? {} : {
+      //  path: '/service-worker.js'
+      //},
       touch: {
         tapHold: true,
       },
@@ -265,7 +267,8 @@ export default {
 
     onMounted(() => {
       f7ready((f7) => {
-        api.doInitialLogin();
+        if (!useStore(store, "token").value)
+          api.doInitialLogin();
       });
     });
 

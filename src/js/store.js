@@ -16,7 +16,7 @@ const store = createStore({
       return state.tsigKeyNames;
     },
     token({ state }) {
-      return state.token;
+      return state.token || localStorage.getItem('token');
     },
     user({ state }) {
       return state.user;
@@ -46,6 +46,7 @@ const store = createStore({
     },
     token({ state }, tkn) {
       state.token = tkn;
+      localStorage.setItem('token', tkn);
     },
     addProduct({ state }, product) {
       state.products = [...state.products, product];

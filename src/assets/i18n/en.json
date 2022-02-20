@@ -1,0 +1,15 @@
+{
+  "navigation.title": "Technitium DNS",
+  "navigation.dashboard": "Dashboard",
+  "navigation.zones": "Zones",
+  "navigation.allowed": "Allowed",
+  "navigation.blocked": "Blocked",
+  "navigation.cache": "Cache",
+  "navigation.settings": "Settings",
+  "navigation.dhcp": "DHCP",
+  "navigation.apps": "Apps",
+  "navigation.tools": "Tools",
+  "navigation.dnsclient": "DNS Client",
+  "navigation.logs": "Logs",
+  "navigation.about": "About"
+}

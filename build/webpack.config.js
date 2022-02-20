@@ -16,7 +16,7 @@ function resolvePath(dir) {
 const env = process.env.NODE_ENV || 'development';
 const target = process.env.TARGET || 'web';
 
-
+const apiBaseUrl = process.env.TDNS_APIBASE || 'http://localhost:8080'
 
 module.exports = {
   mode: env,
@@ -47,6 +47,11 @@ module.exports = {
     contentBase: '/www/',
     disableHostCheck: true,
     historyApiFallback: true,
+    proxy: [{
+      context: ['/api'],
+      target: apiBaseUrl,
+      changeOrigin: true,
+    }]
   },
   optimization: {
     concatenateModules: true,
@@ -164,6 +169,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(env),
       'process.env.TARGET': JSON.stringify(target),
+      'process.env.I18N_LOCALE': JSON.stringify(process.env.I18N_LOCALE),
     }),
     new VueLoaderPlugin(),
     ...(env === 'production' ? [
