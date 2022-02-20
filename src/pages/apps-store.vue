@@ -17,7 +17,7 @@
           v-for="app in storeApps"
           :key="app.name"
           :title="app.name"
-          :subtitle="'Version ' + app.version"
+          :subtitle="$t('misc.version', { version: app.version})"
           :text="app.description"
           :footer="app.size"
           :badge="appBadge(app)"
@@ -30,24 +30,24 @@
         >
           <template v-if="!$device.desktop">
             <f7-swipeout-actions left>
-              <f7-swipeout-button color="orange" @click="updateApp(app)">Update</f7-swipeout-button>
+              <f7-swipeout-button color="orange" @click="updateApp(app)">{{ $t('apps.update') }}</f7-swipeout-button>
             </f7-swipeout-actions>
             <f7-swipeout-actions right>
               <f7-swipeout-button
                 delete
-                confirm-text="Are you sure you want to uninstall this app?"
-              >Uninstall</f7-swipeout-button>
+                :confirm-text="$t('apps.uninstallconfirm', { app: app.name })"
+              >{{ $t('apps.uninstall') }} </f7-swipeout-button>
             </f7-swipeout-actions>
           </template>
         </f7-list-item>
       </template>
       <template v-else>
-        <f7-list-item title="No apps found" text="Could not find any apps on the store."></f7-list-item>
-        <f7-list-button title="Try again" @click="refetchData"></f7-list-button>
+        <f7-list-item :title="$t('apps.noapps')" :text="$t('apps.noappsmsg')"></f7-list-item>
+        <f7-list-button :title="$t('misc.tryagain')" @click="refetchData"></f7-list-button>
       </template>
     </f7-list>
     <f7-block-footer class="text-align-center" v-if="storeApps.length > 0">
-      <p>{{ storeApps.length }} items</p>
+      <p>{{$t('misc.items', { n: storeApps.length})}}</p>
     </f7-block-footer>
   </template>
 </template>
@@ -71,19 +71,19 @@ export default {
   },
   methods: {
     appBadge(app) {
-      return app.updateAvailable ? "Update Available" : app.installed ? "Installed" : null;
+      return app.updateAvailable ? this.$t('apps.updateav') : app.installed ? this.$t('apps.installed') : null;
     },
     appBadgeColour(app) {
       return app.updateAvailable ? "orange" : app.installed ? "green" : null;
     },
     updateApp(app) {
-      f7.dialog.preloader("Updating...");
+      f7.dialog.preloader(this.$t('apps.updating'));
       this.$api.get("", [
         ["name", app.name],
         ["url", app.url],
       ]).then((res) => {
         f7.toast.create({
-          text: app.name + " Updated",
+          text: this.$t('apps.updated', {app: app.name}),
           closeTimeout: 3000,
           horizontalPosition: "center",
         }).open();
@@ -93,12 +93,12 @@ export default {
       });
     },
     uninstallApp(app) {
-      f7.dialog.preloader("Uninstalling...");
+      f7.dialog.preloader(this.$t('apps.uninstalling'));
       this.$api.get("apps/uninstall", [
         ["name", app.name]
       ]).then((res) => {
         f7.toast.create({
-          text: app.name + " Uninstalled Sucessfully",
+          text: this.$t('apps.uninstalledsuccess', {app: app.name}),
           closeTimeout: 3000,
           horizontalPosition: "center",
         }).open();
@@ -119,7 +119,7 @@ export default {
       });
     },
     installApp(app) {
-      f7.dialog.preloader("Installing...");
+      f7.dialog.preloader(this.$t('apps.installing'));
       this.$api.get("apps/downloadAndInstall", [
         ["name", app.name],
         ["url", app.url]
@@ -127,7 +127,7 @@ export default {
         this.refetchData();
         f7.emit("appInstalled", app);
         f7.toast.create({
-          text: app.name + " Installed Sucessfully",
+          text: this.$t('apps.installedsuccess', {app: app.name}),
           closeTimeout: 3000,
           horizontalPosition: "center",
         }).open();
@@ -145,7 +145,7 @@ export default {
 
       if (app.updateAvailable) {
         buttons.push({
-          text: "Update",
+          text: this.$t('apps.update'),
           color: "orange",
           onClick: () => {
             this.updateApp(app);
@@ -155,12 +155,12 @@ export default {
 
       if (app.installed) {
         buttons.push({
-          text: "Uninstall",
+          text: this.$t('apps.uninstall'),
           color: "red",
           onClick: () => {
             f7.dialog.confirm(
-              "Are you sure you want to uninstall this app?",
-              "Uninstall",
+              this.$t('apps.uninstallconfirm', { app: app.name }),
+              this.$t('apps.uninstall'),
               () => {
                 this.uninstallApp(app);
               });
@@ -168,12 +168,12 @@ export default {
         });
       } else {
         buttons.push({
-          text: "Install",
+          text: this.$t('apps.install'),
           color: "green",
           onClick: () => {
             f7.dialog.confirm(
-              "Are you sure you want to install this app?",
-              "Install",
+              this.$t('apps.installconfirm', {app: app.name}),
+              this.$t('apps.install'),
               () => {
                 this.installApp(app);
               });
@@ -182,7 +182,7 @@ export default {
       }
 
       buttons.push({
-        text: 'Cancel',
+        text: this.$t('misc.cancel'),
       });
 
       f7.actions.create({

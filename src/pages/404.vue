@@ -1,6 +1,6 @@
 <template>
   <f7-page>
-    <f7-navbar title="Not found" back-link="Back"></f7-navbar>
+    <f7-navbar :title="$t('404.title')" back-link="Back"></f7-navbar>
 
     <f7-block class="text-align-center">
       <p>
@@ -11,7 +11,7 @@
           >report_problem</i
         >
       </p>
-      <p>Page Not Found</p>
+      <p>{{$t('404.pagenotfound')}}</p>
     </f7-block>
   </f7-page>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <f7-page name="apps" :page-content="false">
-    <f7-navbar title="Apps">
+    <f7-navbar :title="$t('apps.title')">
       <template v-slot:left>
         <f7-link
           icon-ios="f7:menu"
@@ -15,7 +15,7 @@
         tab-link
         href="./"
         route-tab-id="installed"
-        text="Installed"
+        :text="$t('apps.installed')"
         icon-ios="f7:keyboard"
         icon-aurora="material:keyboard"
         icon-md="material:keyboard"
@@ -24,7 +24,7 @@
         tab-link
         href="store/"
         route-tab-id="store"
-        text="Store"
+        :text="$t('apps.store')"
         icon-ios="f7:cart"
         icon-aurora="material:shopping_cart"
         icon-md="material:shopping_cart"

@@ -127,27 +127,27 @@
         <f7-page login-screen>
           <f7-login-screen-title>
             <img src="@/assets/logo.png" />
-            <br />Login
+            <br />{{ $t('login.title') }}
           </f7-login-screen-title>
           <f7-list form>
             <f7-list-input
               type="text"
               name="username"
-              placeholder="Your username"
+              :placeholder="$t('login.username')"
               autocomplete="username"
               v-model:value="username"
             ></f7-list-input>
             <f7-list-input
               type="password"
               name="password"
-              placeholder="Your password"
+              :placeholder="$t('login.password')"
               autocomplete="current-password"
               v-model:value="password"
             ></f7-list-input>
           </f7-list>
           <f7-list>
-            <f7-list-button title="Login" @click="doLogin()"></f7-list-button>
-            <f7-block-footer>Forgot Password?</f7-block-footer>
+            <f7-list-button :title="$t('login.login')" @click="doLogin()"></f7-list-button>
+            <f7-block-footer>{{$t('login.forgot')}}</f7-block-footer>
           </f7-list>
         </f7-page>
       </f7-view>

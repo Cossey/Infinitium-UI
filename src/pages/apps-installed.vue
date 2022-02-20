@@ -23,7 +23,7 @@
             :link="configLink(app.name)"
             :footer="classPath(app)"
             :title="app.name"
-            :subtitle="'Version ' + app.version"
+            :subtitle="$t('misc.version', { version: app.version})"
             :badge="badge(app)"
             badge-color="orange"
             :swipeout="!$device.desktop"
@@ -44,7 +44,7 @@
           </f7-list-item>
         </template>
         <f7-block-footer class="text-align-center">
-          <p>{{ apps.length }} items</p>
+          <p>{{$t('misc.items', { n: apps.length} )}}</p>
         </f7-block-footer>
       </f7-list>
       <f7-block v-else class="text-align-center">
@@ -52,7 +52,7 @@
           <i class="f7-icons if-ios" style="font-size: 100pt">nosign</i>
           <i class="material-icons if-not-ios" style="font-size: 100pt">block</i>
         </p>
-        <p>There are no Apps installed</p>
+        <p>{{ $t('apps.noneinstalled') }}</p>
       </f7-block>
     </template>
   </div>
@@ -78,7 +78,7 @@ export default {
   methods: {
     badge(app) {
       if (app.updateAvailable) {
-        return "Update " + app.updateVersion;
+        return app.$t('apps.updatever', {version: app.updateVersion});
       } else {
         return null;
       }
@@ -145,10 +145,10 @@ export default {
     },
     updateApp(entry) {
       if (!entry.updateUrl) {
-        f7.dialog.alert("No update URL specified for this app.");
+        f7.dialog.alert(app.$t('apps.updaterrorurl'));
         return;
       }
-      f7.dialog.preloader("Updating...");
+      f7.dialog.preloader(app.$t('apps.updating'));
       this.$api.get("apps/downloadAndUpdate", [
         ["name", entry.name],
         ["url", entry.updateUrl],
@@ -160,7 +160,7 @@ export default {
       });
     },
     uninstallApp(appName) {
-      f7.dialog.preloader("Uninstalling...");
+      f7.dialog.preloader(app.$t('apps.uninstalling'));
       this.$api.get("apps/uninstall", [
         ["name", appName]
       ]).then((res) => {
