@@ -1,6 +1,6 @@
 <template>
   <f7-page name="zones" ptr @ptr:refresh="fetchData">
-    <f7-navbar title="Zones">
+    <f7-navbar :title="$t('zones.title')">
       <template v-slot:left>
         <f7-link
           icon-ios="f7:menu"
@@ -12,13 +12,33 @@
       <template v-slot:right>
         <f7-link v-if="$theme.ios" text="Add" @click="newZone()"></f7-link>
       </template>
+      <f7-subnavbar>
+        <f7-searchbar
+          search-container=".media-list"
+          search-item=".media-item"
+          search-in=".item-title"
+          :placeholder="$t('misc.search')"
+          :disable-button="!$theme.aurora"
+        />
+      </f7-subnavbar>
     </f7-navbar>
     <template #fixed v-if="!$theme.ios">
-      <f7-fab position="center-bottom" text="Add" color="red" @click="newZone()">
+      <f7-fab position="right-bottom" tooltip="Add Zone" color="red" @click="newZone()">
         <f7-icon ios="f7:plus" aurora="f7:plus" md="material:add"></f7-icon>
       </f7-fab>
     </template>
-    <f7-list media-list>
+    <f7-list class="searchbar-not-found">
+      <f7-list-item title="No results found" />
+    </f7-list>
+    <f7-list media-list v-if="loading">
+      <f7-list-item 
+      v-for="n in 10"
+      :key="n"
+      class="skeleton-text skeleton-effect-wave"
+      title="____________" 
+      />
+    </f7-list>
+    <f7-list media-list class="searchbar-found" v-if="!loading">
       <template v-for="zone in zoneList" v-bind:key="zone">
         <f7-list-item
           :swipeout="!$device.desktop"
@@ -60,17 +80,19 @@
       </template>
     </f7-list>
     <f7-block-footer class="text-align-center">
-      <p>{{ zoneList.length }} total zones</p>
+      <p>{{ $t('misc.zones', {n: zoneList.length}) }}</p>
     </f7-block-footer>
   </f7-page>
 </template>
 <script>
 import { f7ready } from "framework7-vue";
+import { ref } from '@vue/reactivity';
 
 export default {
   data() {
     return {
       zoneList: [],
+      loading: ref(true),
     }
   },
   props: {
@@ -110,6 +132,7 @@ export default {
     fetchData: function (done) {
       this.$api.get("listZones").then((data) => {
         this.zoneList = data.zones;
+        this.loading = false;
         if (typeof done !== "undefined") done();
       });
     },

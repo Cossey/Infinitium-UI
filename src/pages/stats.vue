@@ -6,6 +6,7 @@
           search-container=".search-list"
           search-item="tr"
           search-in=".label-cell"
+          :placeholder="$t('misc.search')"
           :disable-button="!$theme.aurora"
         ></f7-searchbar>
       </f7-subnavbar>

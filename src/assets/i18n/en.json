@@ -40,9 +40,12 @@
   "apps.noneinstalled": "There are no Apps installed",
   "apps.noapps": "No Apps found",
   "apps.noappsmsg": "Could not find any apps on the store.",
+  "zones.title": "Zones",
   "misc.cancel": "Cancel",
   "misc.items": "No items | 1 item | {n} items",
   "misc.version": "Version {version}",
   "misc.tryagain": "Try again",
-  "misc.records": "No records | 1 record | {n} records"
+  "misc.records": "No records | 1 record | {n} records",
+  "misc.zones": "No zones | 1 zone | {n} zones",
+  "misc.search": "Search"
 }

@@ -12,7 +12,7 @@
       </template>
     </f7-navbar>
 
-    <f7-block>
+    <f7-block v-if="!loading">
       <p>
         {{ zone.name }}
         <f7-badge :color="zone.internal ? 'gray' : 'blue'">{{ recordType(zone) }}</f7-badge>
@@ -23,8 +23,11 @@
         <span v-if="zone.expiry" class="expiry-text">Expiry: {{ dateFormat(zone.expiry) }}</span>
       </p>
     </f7-block>
+    <f7-block v-if="loading">
+      <p>Loading</p>
+    </f7-block>
 
-    <f7-block v-if="!zone.internal" :class="(selectActive ? 'disabled' : '')">
+    <f7-block v-if="!zone.internal && !loading" :class="(selectActive ? 'disabled' : '')">
       <f7-row>
         <f7-col v-if="zone.type === 'Primary' || zone.type === 'Forwarder'">
           <f7-button color="blue" @click="recordAdd">Add Record</f7-button>
@@ -66,45 +69,60 @@
       />
     </f7-toolbar>
 
-    <f7-list media-list>
-      <template v-for="record in recordList" v-bind:key="record">
+    <template v-if="loading">
+      <f7-list media-list>
         <f7-list-item
-          swipeout
-          @swipeout:deleted="removeRecord(record)"
-          @click="(e) => recordClick(e, record)"
-          :header="record.type"
-          :title="record.name"
-          :checkbox="selectActive && canDisableDelete(record)"
-          :checked="selectItemSelected(record.type + record.name)"
-          :after="'TTL: ' + record.ttl"
-          :text="convertData(record.rData)"
-          :footer="recordDisabled(record.disabled)"
-          :no-chevron="selectActive"
-        >
-          <f7-swipeout-actions v-if="canDisableDelete(record)" right>
-            <f7-swipeout-button
-              delete
-              confirm-text="Are you sure you want to delete this record?"
-            >Delete</f7-swipeout-button>
-          </f7-swipeout-actions>
-          <f7-swipeout-actions v-if="canDisableDelete(record)" left>
-            <f7-swipeout-button
-              v-if="record.disabled"
-              color="green"
-              @click="enableRecord(record)"
-            >Enable</f7-swipeout-button>
-            <f7-swipeout-button
-              v-if="!record.disabled"
-              color="orange"
-              @click="disableRecord(record)"
-            >Disable</f7-swipeout-button>
-          </f7-swipeout-actions>
-        </f7-list-item>
-      </template>
-    </f7-list>
-    <f7-block-footer class="text-align-center">
-      <p>{{ recordList.length }} records</p>
-    </f7-block-footer>
+          v-for="n in 3"
+          :key="n"
+          class="skeleton-text skeleton-effect-wave"
+          header="___"
+          title="________________"
+          after="___ ___"
+          text="________________________________"
+        ></f7-list-item>
+      </f7-list>
+    </template>
+    <template v-else>
+      <f7-list media-list v-if="!loading">
+        <template v-for="record in recordList" v-bind:key="record">
+          <f7-list-item
+            swipeout
+            @swipeout:deleted="removeRecord(record)"
+            @click="(e) => recordClick(e, record)"
+            :header="record.type"
+            :title="record.name"
+            :checkbox="selectActive && canDisableDelete(record)"
+            :checked="selectItemSelected(record.type + record.name)"
+            :after="'TTL: ' + record.ttl"
+            :text="convertData(record.rData)"
+            :footer="recordDisabled(record.disabled)"
+            :no-chevron="selectActive"
+          >
+            <f7-swipeout-actions v-if="canDisableDelete(record)" right>
+              <f7-swipeout-button
+                delete
+                confirm-text="Are you sure you want to delete this record?"
+              >Delete</f7-swipeout-button>
+            </f7-swipeout-actions>
+            <f7-swipeout-actions v-if="canDisableDelete(record)" left>
+              <f7-swipeout-button
+                v-if="record.disabled"
+                color="green"
+                @click="enableRecord(record)"
+              >Enable</f7-swipeout-button>
+              <f7-swipeout-button
+                v-if="!record.disabled"
+                color="orange"
+                @click="disableRecord(record)"
+              >Disable</f7-swipeout-button>
+            </f7-swipeout-actions>
+          </f7-list-item>
+        </template>
+      </f7-list>
+      <f7-block-footer class="text-align-center">
+        <p>{{ $t('misc.records', { n: recordList.length }) }}</p>
+      </f7-block-footer>
+    </template>
   </f7-page>
 </template>
 <style lang="less" scoped>
@@ -118,6 +136,7 @@
 </style>
 <script>
 import { f7, f7ready } from "framework7-vue";
+import { ref } from "vue";
 import SelectMixin from "@/components/select-mixin";
 
 export default {
@@ -126,6 +145,7 @@ export default {
     return {
       recordList: [],
       zone: {},
+      loading: ref(true)
     }
   },
   props: {
@@ -302,7 +322,7 @@ export default {
       this.$api.get("getRecords", [["domain", this.zoneName]]).then((data) => {
         this.recordList = data.records;
         this.zone = data.zone;
-
+        this.loading = false;
         if (typeof done !== "undefined") done();
       });
     },

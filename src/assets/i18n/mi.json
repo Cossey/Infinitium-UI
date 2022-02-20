@@ -40,8 +40,12 @@
   "apps.updaterrorurl": "No update URL specified for this app.",
   "apps.noapps": "No Apps found",
   "apps.noappsmsg": "Could not find any apps on the store.",
+  "zones.title": "Rohe",
   "misc.items": "Kore tūemi | Tahi tūemi | {n} tūemi",
   "misc.version": "Putanga {version}",
   "misc.cancel": "Whakakore",
-  "misc.tryagain": "Try again"
+  "misc.tryagain": "Ngana anō",
+  "misc.records": "Kore rekoata | Tahi rekoata | {n} rekoata",
+  "misc.zones": "Kore rohe | Tahi rohe | {n} rohe",
+  "misc.search": "Rapu"
 }
