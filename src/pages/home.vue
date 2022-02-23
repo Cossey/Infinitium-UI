@@ -24,7 +24,7 @@
         <f7-page>
           <f7-navbar title="Filter">
             <f7-nav-right>
-              <f7-link popup-close>Close</f7-link>
+              <f7-link popup-close>{{ $t('dialogs.close') }}</f7-link>
             </f7-nav-right>
           </f7-navbar>
           <f7-list>
@@ -90,29 +90,25 @@
     </f7-toolbar>
     <f7-tabs>
       <f7-tab id="requests" class="page-content" tab-active>
-        <f7-block-title>Query Type</f7-block-title>
         <f7-block>
-          <f7-pie-chart
-            v-if="queryTypeChartData.length > 0"
-            tooltip
-            :datasets="queryTypeChartData"
-          />
-          <f7-row v-if="queryTypeChartData.length == 0">
-            <f7-col>
-              <p>No Data.</p>
+          <f7-row>
+            <f7-col medium="50" width="100">
+              <p class="text-align-center">Query Type</p>
+              <f7-pie-chart
+                v-if="queryTypeChartData.length > 0"
+                tooltip
+                :datasets="queryTypeChartData"
+              />
+              <p v-if="queryTypeChartData.length == 0">{{ $t('home.nodata') }}</p>
             </f7-col>
-          </f7-row>
-        </f7-block>
-        <f7-block-title>Query Response</f7-block-title>
-        <f7-block>
-          <f7-pie-chart
-            v-if="queryResponseChartData.length > 0"
-            tooltip
-            :datasets="queryResponseChartData"
-          />
-          <f7-row v-if="queryResponseChartData.length == 0">
-            <f7-col>
-              <p>No Data.</p>
+            <f7-col medium="50" width="100">
+              <p class="text-align-center">Query Response</p>
+              <f7-pie-chart
+                v-if="queryResponseChartData.length > 0"
+                tooltip
+                :datasets="queryResponseChartData"
+              />
+              <p v-if="queryResponseChartData.length == 0">{{ $t('home.nodata') }}</p>
             </f7-col>
           </f7-row>
         </f7-block>
