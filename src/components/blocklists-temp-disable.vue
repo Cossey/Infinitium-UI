@@ -10,7 +10,7 @@
       type="number"
       validate
       required
-      placeholder="minutes"
+      :placeholder="$t('misc.minutes')"
       min="0"
       max="178956"
       v-model:value="temporaryDisableBlockMins"

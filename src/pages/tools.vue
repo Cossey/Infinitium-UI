@@ -1,6 +1,6 @@
 <template>
   <f7-page name="tools">
-    <f7-navbar title="Tools">
+    <f7-navbar :title="$t('tools.title')">
       <template v-slot:left>
         <f7-link icon-ios="f7:menu" icon-aurora="material:menu" icon-md="material:menu" panel-open="left"></f7-link>
       </template>
@@ -12,7 +12,7 @@
     <f7-block-title>Blocklist</f7-block-title>
     <blocklists-temp-disable :disableBlockingTill="settings.temporaryDisableBlockingTill"></blocklists-temp-disable>
 
-    <f7-block-title>Settings</f7-block-title>
+    <f7-block-title>{{ $t('tools.settings') }}</f7-block-title>
     <f7-list>
       <f7-list-item link="/settings/backup/" title="Backup"></f7-list-item>
       <f7-list-item link="/settings/restore/" title="Restore"></f7-list-item>

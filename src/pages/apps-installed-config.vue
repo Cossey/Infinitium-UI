@@ -3,10 +3,10 @@
     <f7-page>
       <f7-navbar :title="appName + ' Config'">
         <template v-slot:left>
-          <f7-link popup-close>Cancel</f7-link>
+          <f7-link popup-close>{{$t('dialogs.cancel')}}</f7-link>
         </template>
         <template v-slot:right>
-          <f7-link @click="saveData">Save</f7-link>
+          <f7-link @click="saveData">{{$t('dialogs.save')}}</f7-link>
         </template>
       </f7-navbar>
       <f7-list>

@@ -4,7 +4,7 @@
       <f7-page>
         <f7-navbar title="Add Zone">
           <template v-slot:left>
-            <f7-link popup-close>Cancel</f7-link>
+            <f7-link popup-close>{{ $t('dialogs.cancel') }}</f7-link>
           </template>
           <template v-slot:right>
             <f7-link @click="createZone">Add</f7-link>

@@ -3,7 +3,7 @@
     <f7-page>
       <f7-navbar title="DNS Results">
         <f7-nav-right>
-          <f7-link popup-close>Close</f7-link>
+          <f7-link popup-close>{{ $t('dialogs.close') }}</f7-link>
         </f7-nav-right>
       </f7-navbar>
       <f7-toolbar tabbar labels top>

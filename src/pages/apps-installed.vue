@@ -32,13 +32,13 @@
           >
             <template v-if="!$device.desktop">
               <f7-swipeout-actions left v-if="app.updateAvailable">
-                <f7-swipeout-button color="orange" @click="updateApp(app)">Update</f7-swipeout-button>
+                <f7-swipeout-button color="orange" @click="updateApp(app)">{{$t('apps.update')}}</f7-swipeout-button>
               </f7-swipeout-actions>
               <f7-swipeout-actions right>
                 <f7-swipeout-button
                   delete
                   confirm-text="Are you sure you want to uninstall this app?"
-                >Uninstall</f7-swipeout-button>
+                >{{$t('apps.uninstall')}}</f7-swipeout-button>
               </f7-swipeout-actions>
             </template>
           </f7-list-item>

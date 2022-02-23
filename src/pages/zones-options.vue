@@ -2,26 +2,26 @@
   <f7-popup>
     <f7-view>
       <f7-page>
-        <f7-navbar title="Zone Options">
+        <f7-navbar :title="$t('zones.options.title')">
           <template v-slot:left>
-            <f7-link popup-close>Cancel</f7-link>
+            <f7-link popup-close>{{$t('dialogs.cancel')}}</f7-link>
           </template>
           <template v-slot:right>
-            <f7-link @click="updateOptions">Save</f7-link>
+            <f7-link @click="updateOptions">{{$t('dialogs.save')}}</f7-link>
           </template>
         </f7-navbar>
         <f7-list>
-          <f7-list-item ref="xfrSS" class="xfer-ss" title="Zone Transfer" smart-select>
+          <f7-list-item ref="xfrSS" class="xfer-ss" :title="$t('zones.options.zonexfr')" smart-select>
             <select name="xfr" v-model="config.zoneTransfer">
-              <option value="Deny" selected>Deny</option>
-              <option value="Allow">Allow</option>
-              <option value="AllowOnlyZoneNameServers">Allow Only Name Servers in Zone</option>
-              <option value="AllowOnlySpecifiedNameServers">Allow Only Specified Name Servers</option>
+              <option value="Deny" selected>{{$t('misc.deny')}}</option>
+              <option value="Allow">{{$t('misc.allow')}}</option>
+              <option value="AllowOnlyZoneNameServers">{{$t('zones.options.allowzns')}}</option>
+              <option value="AllowOnlySpecifiedNameServers">{{$t('zones.options.allowsns')}}</option>
             </select>
           </f7-list-item>
           <f7-list-input
             :disabled="config.zoneTransfer !== 'AllowOnlySpecifiedNameServers'"
-            label="Allowed Name Servers (IP addresses)"
+            :label="$t('zones.options.ans')"
             type="textarea"
             v-model:value="zoneTransferNameServers"
             resizable
@@ -30,14 +30,14 @@
         <f7-list>
           <f7-list-item ref="notifySS" title="Notify" smart-select>
             <select name="notify" v-model="config.notify">
-              <option value="None" selected>None</option>
-              <option value="ZoneNameServers" selected>Name Servers in Zone</option>
-              <option value="SpecifiedNameServers">Specified Name Servers</option>
+              <option value="None" selected>{{$t('misc.none')}}</option>
+              <option value="ZoneNameServers" selected>{{$t('zones.options.zns')}}</option>
+              <option value="SpecifiedNameServers">{{$t('zones.options.sns')}}</option>
             </select>
           </f7-list-item>
           <f7-list-input
             :disabled="config.notify !== 'SpecifiedNameServers'"
-            label="Notified Name Servers (IP addresses)"
+            :label="$t('zones.options.nns')"
             type="textarea"
             v-model:value="notifyNameServers"
             resizable
@@ -45,20 +45,20 @@
         </f7-list>
         <f7-list>
           <f7-list-input
-            label="TSIG Key Names"
+            :label="$t('zones.options.tsigkeynames')"
             type="textarea"
             v-model:value="zoneTransferTsigKeyNames"
             resizable
           />
-          <f7-list-button popup-open=".tsig-key-list" title="Quick Add" />
+          <f7-list-button popup-open=".tsig-key-list" :title="$t('misc.quickadd')" />
         </f7-list>
       </f7-page>
     </f7-view>
     <f7-popup class="tsig-key-list">
       <f7-page>
-        <f7-navbar title="TSIG Key List">
+        <f7-navbar :title="$t('zones.options.tsigkeylist')">
           <template v-slot:right>
-            <f7-link popup-close>Close</f7-link>
+            <f7-link popup-close>{{$t('dialogs.close')}}</f7-link>
           </template>
         </f7-navbar>
         <f7-list media-list class="search-list searchbar-found">

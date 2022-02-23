@@ -10,7 +10,7 @@
         ></f7-link>
       </template>
       <template v-slot:right>
-        <f7-link v-if="$theme.ios" text="Add" @click="newZone()"></f7-link>
+        <f7-link v-if="$theme.ios" :text="$t('zones.add')" @click="newZone()"></f7-link>
       </template>
       <f7-subnavbar>
         <f7-searchbar
@@ -23,7 +23,7 @@
       </f7-subnavbar>
     </f7-navbar>
     <template #fixed v-if="!$theme.ios">
-      <f7-fab position="right-bottom" tooltip="Add Zone" color="red" @click="newZone()">
+      <f7-fab position="right-bottom" :tooltip="$t('zones.add')" color="red" @click="newZone()">
         <f7-icon ios="f7:plus" aurora="f7:plus" md="material:add"></f7-icon>
       </f7-fab>
     </template>
@@ -50,17 +50,17 @@
           <template v-slot:after>
             <f7-badge
               :color="zone.internal ? 'gray' : 'blue'"
-            >{{ zone.internal ? 'Internal' : zone.type }}</f7-badge>&nbsp;
+            >{{ zone.internal ? this.$t('zones.internal') : zone.type }}</f7-badge>&nbsp;
             <f7-badge
               v-if="zone.disabled || zone.isExpired"
               color="red"
-            >{{ zone.disabled ? 'Disabled' : (zone.isExpired ? 'Expired' : '') }}</f7-badge>
+            >{{ zone.disabled ? this.$t('zones.disabled') : (zone.isExpired ? this.$t('zones.expired') : '') }}</f7-badge>
           </template>
           <template v-if="!$device.desktop">
             <f7-swipeout-actions right v-if="!zone.internal">
               <f7-swipeout-button
                 delete
-                confirm-text="Are you sure you want to delete this zone?"
+                :confirm-text="$t('zones.deleteconfirm')"
               >Delete</f7-swipeout-button>
             </f7-swipeout-actions>
             <f7-swipeout-actions left v-if="!zone.internal">

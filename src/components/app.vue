@@ -283,6 +283,7 @@ export default {
   },
   mounted() {
     f7ready((f7) => {
+      this.updateLocale(f7);
       this.updateThemeConfig();
     });
   },
