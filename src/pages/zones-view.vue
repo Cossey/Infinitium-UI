@@ -1,13 +1,13 @@
 <template>
   <f7-page name="zones" ptr @ptr:refresh="fetchData">
-    <f7-navbar title="View Zone" back-link="Zones">
+    <f7-navbar :title="$t('zones.view.title')" :back-link="$t('zones.title')">
       <template v-slot:right>
         <f7-link
           v-if="zone.type !== 'Stub'"
           icon-md="material:done_all"
           icon-aurora="material:done_all"
           @click="selectToggle"
-          :text="($theme.ios) ? ((selectActive) ? 'Done' : 'Select') : ''"
+          :text="($theme.ios) ? ((selectActive) ? $t('misc.done') : $t('misc.select')) : ''"
         />
       </template>
     </f7-navbar>
@@ -19,8 +19,8 @@
         <f7-badge
           class="badge-padding"
           :color="zone.disabled ? 'red' : (zone.isExpiry ? 'red' : 'green')"
-        >{{ zone.disabled ? "Disabled" : (zone.isExpiry ? "Expired" : "Enabled") }}</f7-badge>
-        <span v-if="zone.expiry" class="expiry-text">Expiry: {{ dateFormat(zone.expiry) }}</span>
+        >{{ zone.disabled ? this.$t('zones.disabled') : (zone.isExpiry ? this.$t('zones.expired') : this.$t('zones.enabled')) }}</f7-badge>
+        <span v-if="zone.expiry" class="expiry-text">{{$t('zone.expiry')}}: {{ dateFormat(zone.expiry) }}</span>
       </p>
     </f7-block>
     <f7-block v-if="loading">
@@ -30,20 +30,20 @@
     <f7-block v-if="!zone.internal && !loading" :class="(selectActive ? 'disabled' : '')">
       <f7-row>
         <f7-col v-if="zone.type === 'Primary' || zone.type === 'Forwarder'">
-          <f7-button color="blue" @click="recordAdd">Add Record</f7-button>
+          <f7-button color="blue" @click="recordAdd">{{$t('zones.addrecord')}}</f7-button>
         </f7-col>
         <f7-col>
-          <f7-button color="orange" @click="zoneDisable" v-if="!zone.disabled">Disable Zone</f7-button>
-          <f7-button color="orange" @click="zoneEnable" v-if="zone.disabled">Enable Zone</f7-button>
+          <f7-button color="orange" @click="zoneDisable" v-if="!zone.disabled">{{$t('zones.disablezone')}}</f7-button>
+          <f7-button color="orange" @click="zoneEnable" v-if="zone.disabled">{{$t('zones.enablezones')}}</f7-button>
         </f7-col>
         <f7-col>
-          <f7-button color="red" @click="zoneDelete">Delete Zone</f7-button>
+          <f7-button color="red" @click="zoneDelete">{{$t('zones.deletezone')}}</f7-button>
         </f7-col>
         <f7-col v-if="zone.type === 'Stub' || zone.type === 'Secondary'">
-          <f7-button color="blue" @click="zoneResync">Resync</f7-button>
+          <f7-button color="blue" @click="zoneResync">{{$t('zones.resync')}}</f7-button>
         </f7-col>
         <f7-col v-if="zone.type === 'Primary' || zone.type === 'Secondary'">
-          <f7-button color="blue" @click="zoneOptions">Options</f7-button>
+          <f7-button color="blue" @click="zoneOptions">{{$t('zones.options')}}</f7-button>
         </f7-col>
       </f7-row>
     </f7-block>
@@ -58,13 +58,13 @@
       <f7-link
         icon-aurora="material:done"
         icon-md="material:done"
-        text="Enable"
+        :text="$t('zones.enable')"
         @click="edSelected('false')"
       />
       <f7-link
         icon-aurora="material:close"
         icon-md="material:close"
-        text="Disable"
+        :text="$t('zones.disable')"
         @click="edSelected('true')"
       />
     </f7-toolbar>
@@ -75,11 +75,11 @@
           v-for="n in 3"
           :key="n"
           class="skeleton-text skeleton-effect-wave"
-          header="___"
           title="________________"
           after="___ ___"
           text="________________________________"
-        ></f7-list-item>
+        >
+        <template #media>___</template></f7-list-item>
       </f7-list>
     </template>
     <template v-else>
@@ -89,19 +89,22 @@
             swipeout
             @swipeout:deleted="removeRecord(record)"
             @click="(e) => recordClick(e, record)"
-            :header="record.type"
+            link="#"
             :title="record.name"
             :checkbox="selectActive && canDisableDelete(record)"
             :checked="selectItemSelected(record.type + record.name)"
             :after="'TTL: ' + record.ttl"
-            :text="convertData(record.rData)"
+            :text="convertData(record.rData, record.type)"
             :footer="recordDisabled(record.disabled)"
             :no-chevron="selectActive"
           >
+          <template #media>
+            {{record.type}}
+          </template>
             <f7-swipeout-actions v-if="canDisableDelete(record)" right>
               <f7-swipeout-button
                 delete
-                confirm-text="Are you sure you want to delete this record?"
+                :confirm-text="$t('zones.view.deleteconfirm')"
               >Delete</f7-swipeout-button>
             </f7-swipeout-actions>
             <f7-swipeout-actions v-if="canDisableDelete(record)" left>
@@ -130,6 +133,12 @@
   margin-left: 5px;
   margin-right: 5px;
 }
+
+::v-deep .item-text {
+  --f7-list-item-text-max-lines: 8;
+  white-space: pre;
+}
+
 .expiry-text {
   font-size: 0.8em;
 }
@@ -154,6 +163,9 @@ export default {
   },
   mounted() {
     f7ready((f7) => {
+      f7.on("updateRecord", () => {
+        this.fetchData();
+      });
       this.fetchData();
     });
   },
@@ -162,7 +174,12 @@ export default {
       if (this.selectActive) {
         this.selectItemToggle(record);
       } else {
-        //this.f7router.navigate(`/records/${this.zoneName}/${record.type}/${record.name}`);
+        this.f7router.navigate("/zones/" + this.zone.name + "/record/", {
+          props: {
+            zoneName: this.zoneName,
+            inRecord: record
+          }
+        });
       }
     },
     dateFormat(date) {
@@ -206,7 +223,7 @@ export default {
       this.f7router.navigate("/zones/" + this.zone.name + "/record/");
     },
     zoneResync() {
-      f7.dialog.confirm("Are you sure you want to resync this zone?", () => {
+      f7.dialog.confirm(this.$t('zones.view.resyncconfirm'), () => {
         this.$api.get("zone/resync", [
           ["domain", this.zone.name]
         ]).then((res) => {
@@ -216,7 +233,7 @@ export default {
     },
     zoneDelete() {
       f7.dialog.confirm(
-        'Are you sure you want to delete this zone?',
+        this.$t('zones.deleteconfirm'),
         () => {
           this.$api.get("deleteZone", [
             ["domain", this.zone.name]
@@ -228,7 +245,7 @@ export default {
     },
     zoneDisable() {
       f7.dialog.confirm(
-        'Are you sure you want to disable this zone?',
+        this.$t('zones.disableconfirm'),
         () => {
           this.$api.get("disableZone", [
             ["domain", this.zone.name]
@@ -241,7 +258,7 @@ export default {
     },
     zoneEnable() {
       f7.dialog.confirm(
-        'Are you sure you want to enable this zone?',
+        this.$t('zones.enableconfirm'),
         () => {
           this.$api.get("enableZone", [
             ["domain", this.zone.name]
@@ -257,15 +274,29 @@ export default {
     },
     recordType: function (record) {
       if (record.internal) {
-        return "Internal";
+        return this.$t('zone.internal');
       } else {
         return record.type;
       }
     },
-    convertData: function (rData) {
+    convertData: function (rData, type) {
       var keyvaluepair = "";
+      var valNames = {
+        NS: "Name Server: ",
+        MX: "Exchange: ",
+        CAA: "Authority: ",
+        SRV: "Target: ",
+      };
+
       for (const property in rData) {
-        keyvaluepair += `${property}: ${rData[property]};\n`;
+        if (property !== "value") {
+          var nP = property.replace(/([A-Z])/g, ' $1').replace(/^./, function (str) { return str.toUpperCase(); });
+          keyvaluepair += `${nP}: ${rData[property]}\n`;
+        } else {
+          keyvaluepair += valNames[type] || "";
+          keyvaluepair += `${rData[property]}\n`;
+        }
+
       }
       return keyvaluepair;
     },
@@ -328,7 +359,7 @@ export default {
     },
     recordDisabled: function (zoneDisabled) {
       if (zoneDisabled) {
-        return "Disabled";
+        return this.$t('zones.disabled');
       }
     },
   },
