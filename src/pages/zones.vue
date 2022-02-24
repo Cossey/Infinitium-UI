@@ -38,7 +38,7 @@
       title="____________" 
       />
     </f7-list>
-    <f7-list media-list class="searchbar-found" v-if="!loading">
+    <f7-list class="searchbar-found" v-if="!loading">
       <template v-for="zone in zoneList" v-bind:key="zone">
         <f7-list-item
           :swipeout="!$device.desktop"

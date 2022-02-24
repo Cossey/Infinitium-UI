@@ -83,24 +83,24 @@
       </f7-list>
     </template>
     <template v-else>
-      <f7-list media-list v-if="!loading">
+      <f7-list v-if="!loading">
         <template v-for="record in recordList" v-bind:key="record">
           <f7-list-item
             swipeout
             @swipeout:deleted="removeRecord(record)"
             @click="(e) => recordClick(e, record)"
             link="#"
-            :title="record.name"
+            :header="record.type"
+            :title="displayRName(record.name, zone.name)"
+            :footer="displayRData(record.rData, record.type)"
             :checkbox="selectActive && canDisableDelete(record)"
             :checked="selectItemSelected(record.type + record.name)"
             :after="'TTL: ' + record.ttl"
-            :text="convertData(record.rData, record.type)"
-            :footer="recordDisabled(record.disabled)"
+            :badge="record.disabled ? $t('zones.disabled') : ''"
+            :badge-color="record.disabled ? 'red' : ''"
+            :text="recordDisabled(record.disabled)"
             :no-chevron="selectActive"
           >
-          <template #media>
-            {{record.type}}
-          </template>
             <f7-swipeout-actions v-if="canDisableDelete(record)" right>
               <f7-swipeout-button
                 delete
@@ -134,9 +134,19 @@
   margin-right: 5px;
 }
 
-::v-deep .item-text {
+:deep .item-text, :deep .item-subtitle, :deep .item-footer {
   --f7-list-item-text-max-lines: 8;
   white-space: pre;
+}
+
+:deep .badge {
+  margin-left: 5px;
+}
+
+:deep .item-media {
+  max-width: 24px;
+  transform: rotate(-90deg);
+  align-self: auto !important;
 }
 
 .expiry-text {
@@ -147,9 +157,10 @@
 import { f7, f7ready } from "framework7-vue";
 import { ref } from "vue";
 import SelectMixin from "@/components/select-mixin";
+import RecordMixin from "@/components/record-mixin";
 
 export default {
-  mixins: [SelectMixin],
+  mixins: [SelectMixin, RecordMixin],
   data() {
     return {
       recordList: [],
@@ -278,27 +289,6 @@ export default {
       } else {
         return record.type;
       }
-    },
-    convertData: function (rData, type) {
-      var keyvaluepair = "";
-      var valNames = {
-        NS: "Name Server: ",
-        MX: "Exchange: ",
-        CAA: "Authority: ",
-        SRV: "Target: ",
-      };
-
-      for (const property in rData) {
-        if (property !== "value") {
-          var nP = property.replace(/([A-Z])/g, ' $1').replace(/^./, function (str) { return str.toUpperCase(); });
-          keyvaluepair += `${nP}: ${rData[property]}\n`;
-        } else {
-          keyvaluepair += valNames[type] || "";
-          keyvaluepair += `${rData[property]}\n`;
-        }
-
-      }
-      return keyvaluepair;
     },
     disableRecord: function (record) {
       this.$api
