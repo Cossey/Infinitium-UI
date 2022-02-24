@@ -1,6 +1,7 @@
 
 import HomePage from '../pages/home.vue';
 import AboutPage from '../pages/about.vue';
+import CachePage from '../pages/cache.vue';
 
 import ZonesPage from '../pages/zones.vue';
 import ZonesNewPage from '../pages/zones-new.vue';
@@ -48,6 +49,10 @@ var routes = [
   {
     path: '/about/',
     component: AboutPage,
+  },
+  {
+    path: '/cache/',
+    component: CachePage,
   },
   {
     path: '/settings/',
