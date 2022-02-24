@@ -37,7 +37,7 @@
               <f7-swipeout-actions right>
                 <f7-swipeout-button
                   delete
-                  confirm-text="Are you sure you want to uninstall this app?"
+                  :confirm-text="$t('apps.uninstallconfirm', { app: app.name })"
                 >{{$t('apps.uninstall')}}</f7-swipeout-button>
               </f7-swipeout-actions>
             </template>
@@ -98,7 +98,7 @@ export default {
 
       var items = [
         {
-          label: "Configure App",
+          label: this.$t('apps.configure'),
           onClick: () => {
             this.f7router.navigate(this.configLink(app.name));
           }
@@ -107,7 +107,7 @@ export default {
 
       if (app.updateAvailable) {
         items.push({
-          label: "Update App",
+          label: this.$t('apps.update'),
           onClick: () => {
             this.updateApp(app);
           },
@@ -115,12 +115,12 @@ export default {
       }
 
       items.push({
-        label: "Uninstall App",
+        label: this.$t('apps.uninstall'),
         icon: 'trash',
         onClick: () => {
           f7.dialog.confirm(
-            "Are you sure you want to uninstall this app?",
-            "Uninstall",
+            this.$t('apps.uninstallconfirm', { app: app.name }),
+            this.$t('apps.uninstall'),
             () => {
               this.uninstallApp(app.name);
             });

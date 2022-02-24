@@ -1,7 +1,7 @@
 <template>
   <f7-popup>
     <f7-page>
-      <f7-navbar :title="appName + ' Config'">
+      <f7-navbar :title="$t('apps.configuration', {app: appName})">
         <template v-slot:left>
           <f7-link popup-close>{{$t('dialogs.cancel')}}</f7-link>
         </template>
@@ -10,9 +10,9 @@
         </template>
       </f7-navbar>
       <f7-list>
-        <f7-list-input type="textarea" label="Config File" resizable v-model:value="config"></f7-list-input>
+        <f7-list-input type="textarea" resizable v-model:value="config"></f7-list-input>
         <f7-block-footer>
-          <p>The app will reload the config automatically after you save it.</p>
+          <p>{{$t('apps.reloadonsave')}}</p>
         </f7-block-footer>
       </f7-list>
     </f7-page>

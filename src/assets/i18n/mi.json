@@ -40,6 +40,8 @@
   "apps.updaterrorurl": "No update URL specified for this app.",
   "apps.noapps": "No Apps found",
   "apps.noappsmsg": "Could not find any apps on the store.",
+  "apps.configure": "Whirihoranga",
+  "apps.configuration": "{app} whirihoranga",
   "zones.title": "Rohe",
   "zones.enabled": "I whakahohea",
   "zones.disabled": "Disabled",
