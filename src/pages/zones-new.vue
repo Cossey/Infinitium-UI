@@ -74,7 +74,7 @@
             label="Forwarder"
             type="text"
             :placeholder="zoneForwarderPlaceholder(type)"
-            v-model:value="domain"
+            v-model:value="forwarder"
             :disabled="useThisServer"
             :required="!useThisServer && type === 'forwarder'"
           />

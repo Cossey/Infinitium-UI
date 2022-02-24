@@ -31,11 +31,11 @@
       <f7-list-item title="No results found" />
     </f7-list>
     <f7-list media-list v-if="loading">
-      <f7-list-item 
-      v-for="n in 10"
-      :key="n"
-      class="skeleton-text skeleton-effect-wave"
-      title="____________" 
+      <f7-list-item
+        v-for="n in 10"
+        :key="n"
+        class="skeleton-text skeleton-effect-wave"
+        title="____________"
       />
     </f7-list>
     <f7-list class="searchbar-found" v-if="!loading">
@@ -46,11 +46,12 @@
           :link="'' + zone.name + '/view/'"
           :title="zone.name"
           :subtitle="(typeof zone.expiry !== 'undefined' ? 'Expiry ' + dateFormat(zone.expiry) : '')"
+          @contextmenu="showContextMenu(zone, $event)"
         >
           <template v-slot:after>
             <f7-badge
               :color="zone.internal ? 'gray' : 'blue'"
-            >{{ zone.internal ? this.$t('zones.internal') : zone.type }}</f7-badge>&nbsp;
+            >{{ zone.internal ? this.$t('zones.internal') : translateZoneType(zone.type) }}</f7-badge>&nbsp;
             <f7-badge
               v-if="zone.disabled || zone.isExpired"
               color="red"
@@ -61,31 +62,31 @@
               <f7-swipeout-button
                 delete
                 :confirm-text="$t('zones.deleteconfirm')"
-              >Delete</f7-swipeout-button>
+              >{{ $t('misc.delete') }}</f7-swipeout-button>
             </f7-swipeout-actions>
             <f7-swipeout-actions left v-if="!zone.internal">
               <f7-swipeout-button
                 v-if="zone.disabled"
                 color="green"
                 @click="enableZone(zone.name)"
-              >Enable</f7-swipeout-button>
+              >{{ $t('zones.enable') }}</f7-swipeout-button>
               <f7-swipeout-button
                 v-if="!zone.disabled"
                 color="orange"
                 @click="disableZone(zone.name)"
-              >Disable</f7-swipeout-button>
+              >{{ $t('zones.disable') }}</f7-swipeout-button>
             </f7-swipeout-actions>
           </template>
         </f7-list-item>
       </template>
     </f7-list>
     <f7-block-footer class="text-align-center">
-      <p>{{ $t('misc.zones', {n: zoneList.length}) }}</p>
+      <p>{{ $t('misc.zones', { n: zoneList.length }) }}</p>
     </f7-block-footer>
   </f7-page>
 </template>
 <script>
-import { f7ready } from "framework7-vue";
+import { f7, f7ready } from "framework7-vue";
 import { ref } from '@vue/reactivity';
 
 export default {
@@ -112,9 +113,21 @@ export default {
     newZone() {
       this.f7router.navigate("new/");
     },
+    translateZoneType(zoneType) {
+      return this.$t(`zones.type.${zoneType.toLowerCase()}`);
+    },
     dateFormat(date) {
       if (!date) return null;
       return new Date(date).toLocaleString();
+    },
+    resyncZone: function (zoneName) {
+      f7.dialog.confirm(this.$t('zones.view.resyncconfirm'), () => {
+        this.$api.get("zone/resync", [
+          ["domain", zoneName]
+        ]).then((res) => {
+          this.fetchData();
+        });
+      });
     },
     removeZone: function (zoneName) {
       this.$api.delete("Zone", "domain", "name", zoneName, this.zoneList);
@@ -135,6 +148,76 @@ export default {
         this.loading = false;
         if (typeof done !== "undefined") done();
       });
+    },
+    zoneOptions(zone) {
+      this.f7router.navigate("/zones/" + zone + "/options/");
+    },
+    showContextMenu(zone, event) {
+      event.preventDefault();
+
+      var items = [];
+
+      if (!zone.internal) {
+        if (zone.type === 'Primary' || zone.type === 'Secondary') {
+          items.push({
+            label: this.$t('zones.options'),
+            divided: true,
+            onClick: () => {
+              this.zoneOptions(zone.name);
+            }
+          });
+        }
+
+        if (zone.type === 'Stub' || zone.type === 'Secondary') {
+          if (items.length == 1) {
+            items[0].divided = false;
+          }
+          items.push({
+            label: this.$t('zones.resync'),
+            divided: true,
+            onClick: () => {
+              this.resyncZone(zone.name);
+            }
+          });
+        }
+
+
+        if (zone.disabled) {
+          items.push({
+            label: this.$t('zones.enable'),
+            onClick: () => {
+              this.enableZone(zone.name);
+            }
+          });
+        } else {
+          items.push({
+            label: this.$t('zones.disable'),
+            onClick: () => {
+              this.disableZone(zone.name);
+            },
+          });
+        }
+
+        items.push({
+          label: this.$t('zones.deletezone'),
+          icon: 'trash',
+          onClick: () => {
+            f7.dialog.confirm(
+              this.$t('zones.deleteconfirm'),
+              this.$t('zones.deletezone'),
+              () => {
+                this.removeZone(zone.name);
+              });
+          }
+        });
+
+
+        this.$contextmenu({
+          x: event.x,
+          y: event.y,
+          items: items
+        });
+      }
     },
   },
 };

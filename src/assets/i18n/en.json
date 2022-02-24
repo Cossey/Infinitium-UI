@@ -43,6 +43,10 @@
   "apps.noneinstalled": "There are no Apps installed",
   "apps.noapps": "No Apps found",
   "apps.noappsmsg": "Could not find any apps on the store.",
+  "zones.type.primary": "Primary",
+  "zones.type.secondary": "Secondary",
+  "zones.type.stub": "Stub",
+  "zones.type.forwarder": "Forwarder",
   "zones.enabled": "Enabled",
   "zones.disabled": "Disabled",
   "zones.enable": "Enable",
@@ -76,6 +80,7 @@
   "zones.options.ans": "Allowed Name Servers (IP addresses)",
   "zones.newrecord": "New Record",
   "zones.editrecord": "Edit Record",
+  "zones.deleterecord": "Delete Record",
   "tools.title": "Tools",
   "tools.settings": "Settings",
   "home.nodata": "No data available",
@@ -106,5 +111,6 @@
   "misc.none": "None",
   "misc.deny": "Deny",
   "misc.allow": "Allow",
+  "misc.delete": "Delete",
   "misc.comment": "Comment"
 }

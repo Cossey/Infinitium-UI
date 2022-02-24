@@ -20,7 +20,10 @@
           class="badge-padding"
           :color="zone.disabled ? 'red' : (zone.isExpiry ? 'red' : 'green')"
         >{{ zone.disabled ? this.$t('zones.disabled') : (zone.isExpiry ? this.$t('zones.expired') : this.$t('zones.enabled')) }}</f7-badge>
-        <span v-if="zone.expiry" class="expiry-text">{{$t('zone.expiry')}}: {{ dateFormat(zone.expiry) }}</span>
+        <span
+          v-if="zone.expiry"
+          class="expiry-text"
+        >{{ $t('zones.expiry') }}: {{ dateFormat(zone.expiry) }}</span>
       </p>
     </f7-block>
     <f7-block v-if="loading">
@@ -30,20 +33,28 @@
     <f7-block v-if="!zone.internal && !loading" :class="(selectActive ? 'disabled' : '')">
       <f7-row>
         <f7-col v-if="zone.type === 'Primary' || zone.type === 'Forwarder'">
-          <f7-button color="blue" @click="recordAdd">{{$t('zones.addrecord')}}</f7-button>
+          <f7-button color="blue" @click="recordAdd">{{ $t('zones.addrecord') }}</f7-button>
         </f7-col>
         <f7-col>
-          <f7-button color="orange" @click="zoneDisable" v-if="!zone.disabled">{{$t('zones.disablezone')}}</f7-button>
-          <f7-button color="orange" @click="zoneEnable" v-if="zone.disabled">{{$t('zones.enablezones')}}</f7-button>
+          <f7-button
+            color="orange"
+            @click="zoneDisable"
+            v-if="!zone.disabled"
+          >{{ $t('zones.disablezone') }}</f7-button>
+          <f7-button
+            color="orange"
+            @click="zoneEnable"
+            v-if="zone.disabled"
+          >{{ $t('zones.enablezones') }}</f7-button>
         </f7-col>
         <f7-col>
-          <f7-button color="red" @click="zoneDelete">{{$t('zones.deletezone')}}</f7-button>
+          <f7-button color="red" @click="zoneDelete">{{ $t('zones.deletezone') }}</f7-button>
         </f7-col>
         <f7-col v-if="zone.type === 'Stub' || zone.type === 'Secondary'">
-          <f7-button color="blue" @click="zoneResync">{{$t('zones.resync')}}</f7-button>
+          <f7-button color="blue" @click="zoneResync">{{ $t('zones.resync') }}</f7-button>
         </f7-col>
         <f7-col v-if="zone.type === 'Primary' || zone.type === 'Secondary'">
-          <f7-button color="blue" @click="zoneOptions">{{$t('zones.options')}}</f7-button>
+          <f7-button color="blue" @click="zoneOptions">{{ $t('zones.options') }}</f7-button>
         </f7-col>
       </f7-row>
     </f7-block>
@@ -79,14 +90,15 @@
           after="___ ___"
           text="________________________________"
         >
-        <template #media>___</template></f7-list-item>
+          <template #media>___</template>
+        </f7-list-item>
       </f7-list>
     </template>
     <template v-else>
       <f7-list v-if="!loading">
         <template v-for="record in recordList" v-bind:key="record">
           <f7-list-item
-            swipeout
+            :swipeout="!$device.desktop"
             @swipeout:deleted="removeRecord(record)"
             @click="(e) => recordClick(e, record)"
             link="#"
@@ -100,25 +112,25 @@
             :badge-color="record.disabled ? 'red' : ''"
             :text="recordDisabled(record.disabled)"
             :no-chevron="selectActive"
+            @contextmenu="showContextMenu(record, $event)"
           >
-            <f7-swipeout-actions v-if="canDisableDelete(record)" right>
-              <f7-swipeout-button
-                delete
-                :confirm-text="$t('zones.view.deleteconfirm')"
-              >Delete</f7-swipeout-button>
-            </f7-swipeout-actions>
-            <f7-swipeout-actions v-if="canDisableDelete(record)" left>
-              <f7-swipeout-button
-                v-if="record.disabled"
-                color="green"
-                @click="enableRecord(record)"
-              >Enable</f7-swipeout-button>
-              <f7-swipeout-button
-                v-if="!record.disabled"
-                color="orange"
-                @click="disableRecord(record)"
-              >Disable</f7-swipeout-button>
-            </f7-swipeout-actions>
+            <template v-if="!$device.desktop">
+              <f7-swipeout-actions v-if="canDisableDelete(record)" right>
+                <f7-swipeout-button delete :confirm-text="$t('zones.view.deleteconfirm')">Delete</f7-swipeout-button>
+              </f7-swipeout-actions>
+              <f7-swipeout-actions v-if="canDisableDelete(record)" left>
+                <f7-swipeout-button
+                  v-if="record.disabled"
+                  color="green"
+                  @click="enableRecord(record)"
+                >Enable</f7-swipeout-button>
+                <f7-swipeout-button
+                  v-if="!record.disabled"
+                  color="orange"
+                  @click="disableRecord(record)"
+                >Disable</f7-swipeout-button>
+              </f7-swipeout-actions>
+            </template>
           </f7-list-item>
         </template>
       </f7-list>
@@ -134,7 +146,9 @@
   margin-right: 5px;
 }
 
-:deep .item-text, :deep .item-subtitle, :deep .item-footer {
+:deep .item-text,
+:deep .item-subtitle,
+:deep .item-footer {
   --f7-list-item-text-max-lines: 8;
   white-space: pre;
 }
@@ -181,6 +195,57 @@ export default {
     });
   },
   methods: {
+    showContextMenu(record, event) {
+      event.preventDefault();
+
+      var items = [];
+
+      /*{
+              label: this.$t('zones.options'),
+              divided: true,
+              onClick: () => {
+                this.zoneOptions(zone.name);
+              }
+            }
+            */
+      if (this.canDisableDelete(record)) {
+        if (record.disabled) {
+          items.push({
+            label: this.$t('zones.enable'),
+            onClick: () => {
+              this.enableRecord(record);
+            }
+          });
+        } else {
+          items.push({
+            label: this.$t('zones.disable'),
+            onClick: () => {
+              this.disableRecord(record);
+            },
+          });
+        }
+
+        items.push({
+          label: this.$t('zones.deleterecord'),
+          icon: 'trash',
+          onClick: () => {
+            f7.dialog.confirm(
+              this.$t('zones.view.deleteconfirm'),
+              this.$t('zones.deleterecord'),
+              () => {
+                this.removeRecord(record);
+              });
+          }
+        });
+
+        this.$contextmenu({
+          x: event.x,
+          y: event.y,
+          items: items
+        });
+      }
+
+    },
     recordClick(event, record) {
       if (this.selectActive) {
         this.selectItemToggle(record);
@@ -285,9 +350,9 @@ export default {
     },
     recordType: function (record) {
       if (record.internal) {
-        return this.$t('zone.internal');
+        return this.$t('zones.internal');
       } else {
-        return record.type;
+        return this.$t(`zones.type.${record.type.toLowerCase()}`);;
       }
     },
     disableRecord: function (record) {
