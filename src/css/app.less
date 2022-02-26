@@ -119,8 +119,8 @@
 
     .icon {
       color: var(--f7-text-color);
-      vertical-align: baseline;
-      width: 0;
+      vertical-align: text-top;
+      margin-top: 2px;
     }
 
     .text {
@@ -133,6 +133,24 @@
 
     &:active {
       background-color: var(--f7-theme-color);
+    }
+  }
+
+  .material-icons{
+    &.delete::after {
+      content: "\e872";
+    }
+    &.disable::after {
+      content: "\e888";
+    }
+    &.sync::after {
+      content: "\e627";
+    }
+    &.enable::after {
+      content: "\e92d";
+    }
+    &.settings::after {
+      content: "\e8b8";
     }
   }
 }
