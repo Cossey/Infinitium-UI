@@ -16,7 +16,7 @@ export function loadLocaleMessages (locales) {
 export const i18n = createI18n({
   locale: process.env.I18N_LOCALE || navigator.language || navigator.userLanguage || 'en',
   fallbackLocale: 'en',
-  messages: loadLocaleMessages(require.context('@/assets/i18n'))
+  messages: loadLocaleMessages(require.context('@/assets/i18n/common'))
 })
 
 export default {
