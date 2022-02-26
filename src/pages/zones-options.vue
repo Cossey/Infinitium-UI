@@ -4,19 +4,24 @@
       <f7-page>
         <f7-navbar :title="$t('zones.options.title')">
           <template v-slot:left>
-            <f7-link popup-close>{{$t('dialogs.cancel')}}</f7-link>
+            <f7-link popup-close>{{ $t('dialogs.cancel') }}</f7-link>
           </template>
           <template v-slot:right>
-            <f7-link @click="updateOptions">{{$t('dialogs.save')}}</f7-link>
+            <f7-link @click="updateOptions">{{ $t('dialogs.save') }}</f7-link>
           </template>
         </f7-navbar>
         <f7-list>
-          <f7-list-item ref="xfrSS" class="xfer-ss" :title="$t('zones.options.zonexfr')" smart-select>
+          <f7-list-item
+            ref="xfrSS"
+            class="xfer-ss"
+            :title="$t('zones.options.zonexfr')"
+            smart-select
+          >
             <select name="xfr" v-model="config.zoneTransfer">
-              <option value="Deny" selected>{{$t('misc.deny')}}</option>
-              <option value="Allow">{{$t('misc.allow')}}</option>
-              <option value="AllowOnlyZoneNameServers">{{$t('zones.options.allowzns')}}</option>
-              <option value="AllowOnlySpecifiedNameServers">{{$t('zones.options.allowsns')}}</option>
+              <option value="Deny" selected v-t="'zones.options.deny'"></option>
+              <option value="Allow" v-t="'zones.options.allow'"></option>
+              <option value="AllowOnlyZoneNameServers" v-t="'zones.options.allowzns'"></option>
+              <option value="AllowOnlySpecifiedNameServers" v-t="'zones.options.allowsns'"></option>
             </select>
           </f7-list-item>
           <f7-list-input
@@ -28,11 +33,11 @@
           />
         </f7-list>
         <f7-list>
-          <f7-list-item ref="notifySS" title="Notify" smart-select>
+          <f7-list-item ref="notifySS" :title="$t('zones.options.notify')" smart-select>
             <select name="notify" v-model="config.notify">
-              <option value="None" selected>{{$t('misc.none')}}</option>
-              <option value="ZoneNameServers" selected>{{$t('zones.options.zns')}}</option>
-              <option value="SpecifiedNameServers">{{$t('zones.options.sns')}}</option>
+              <option value="None" v-t="'zones.options.none'"></option>
+              <option value="ZoneNameServers" selected v-t="'zones.options.zns'"></option>
+              <option value="SpecifiedNameServers" v-t="'zones.options.sns'"></option>
             </select>
           </f7-list-item>
           <f7-list-input
@@ -50,7 +55,7 @@
             v-model:value="zoneTransferTsigKeyNames"
             resizable
           />
-          <f7-list-button popup-open=".tsig-key-list" :title="$t('misc.quickadd')" />
+          <f7-list-button popup-open=".tsig-key-list" :title="$t('zones.options.tsigquickadd')" />
         </f7-list>
       </f7-page>
     </f7-view>
@@ -58,7 +63,7 @@
       <f7-page>
         <f7-navbar :title="$t('zones.options.tsigkeylist')">
           <template v-slot:right>
-            <f7-link popup-close>{{$t('dialogs.close')}}</f7-link>
+            <f7-link popup-close v-t="'dialogs.close'" />
           </template>
         </f7-navbar>
         <f7-list media-list class="search-list searchbar-found">
@@ -72,8 +77,12 @@
 </template>
 <script>
 import { f7, f7ready } from 'framework7-vue';
+import { loadLocaleMessages } from '../js/i18n';
 
 export default {
+  i18n: {
+    messages: loadLocaleMessages(require.context('@/assets/i18n/zones'))
+  },
   props:
   {
     zoneName: String,

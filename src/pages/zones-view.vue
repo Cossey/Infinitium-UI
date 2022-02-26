@@ -1,5 +1,5 @@
 <template>
-  <f7-page name="zones" ptr @ptr:refresh="fetchData">
+  <f7-page name="zones-view" ptr @ptr:refresh="fetchData">
     <f7-navbar :title="$t('zones.view.title')" :back-link="$t('zones.title')">
       <template v-slot:right>
         <f7-link
@@ -14,7 +14,7 @@
 
     <f7-block v-if="!loading">
       <p>
-        {{ zone.name }}
+        <span class="domain-text">{{ zone.name }}</span>
         <f7-badge :color="zone.internal ? 'gray' : 'blue'">{{ recordType(zone) }}</f7-badge>
         <f7-badge
           class="badge-padding"
@@ -23,38 +23,41 @@
         <span
           v-if="zone.expiry"
           class="expiry-text"
-        >{{ $t('zones.expiry') }}: {{ dateFormat(zone.expiry) }}</span>
+          v-t="{ path: 'zones.expiry', args: [dateFormat(zone.expiry)] }"
+        />
       </p>
     </f7-block>
     <f7-block v-if="loading">
-      <p>Loading</p>
+      <f7-preloader />
     </f7-block>
 
     <f7-block v-if="!zone.internal && !loading" :class="(selectActive ? 'disabled' : '')">
       <f7-row>
         <f7-col v-if="zone.type === 'Primary' || zone.type === 'Forwarder'">
-          <f7-button color="blue" @click="recordAdd">{{ $t('zones.addrecord') }}</f7-button>
+          <f7-button color="blue" @click="recordAdd" v-t="'zones.addrecord'" />
         </f7-col>
         <f7-col>
           <f7-button
             color="orange"
             @click="zoneDisable"
             v-if="!zone.disabled"
-          >{{ $t('zones.disablezone') }}</f7-button>
+            v-t="'zones.disablezone'"
+          />
           <f7-button
             color="orange"
             @click="zoneEnable"
             v-if="zone.disabled"
-          >{{ $t('zones.enablezones') }}</f7-button>
+            v-t="'zones.enablezones'"
+          />
         </f7-col>
         <f7-col>
-          <f7-button color="red" @click="zoneDelete">{{ $t('zones.deletezone') }}</f7-button>
+          <f7-button color="red" @click="zoneDelete" v-t="'zones.deletezone'" />
         </f7-col>
         <f7-col v-if="zone.type === 'Stub' || zone.type === 'Secondary'">
-          <f7-button color="blue" @click="zoneResync">{{ $t('zones.resync') }}</f7-button>
+          <f7-button color="blue" @click="zoneResync" v-t="'zones.resync'" />
         </f7-col>
         <f7-col v-if="zone.type === 'Primary' || zone.type === 'Secondary'">
-          <f7-button color="blue" @click="zoneOptions">{{ $t('zones.options') }}</f7-button>
+          <f7-button color="blue" @click="zoneOptions" v-t="'zones.options'" />
         </f7-col>
       </f7-row>
     </f7-block>
@@ -63,7 +66,7 @@
       <f7-link
         icon-aurora="material:delete"
         icon-md="material:delete"
-        text="Delete"
+        text="$t('zones.delete')"
         @click="deleteSelected"
       />
       <f7-link
@@ -112,30 +115,36 @@
             :badge-color="record.disabled ? 'red' : ''"
             :text="recordDisabled(record.disabled)"
             :no-chevron="selectActive"
-            @contextmenu="showContextMenu(record, $event)"
+            @contextmenu="cmShow($event, record)"
           >
             <template v-if="!$device.desktop">
               <f7-swipeout-actions v-if="canDisableDelete(record)" right>
-                <f7-swipeout-button delete :confirm-text="$t('zones.view.deleteconfirm')">Delete</f7-swipeout-button>
+                <f7-swipeout-button
+                  delete
+                  :confirm-text="$t('zones.view.deleteconfirm')"
+                  v-t="'zones.delete'"
+                />
               </f7-swipeout-actions>
               <f7-swipeout-actions v-if="canDisableDelete(record)" left>
                 <f7-swipeout-button
                   v-if="record.disabled"
                   color="green"
                   @click="enableRecord(record)"
-                >Enable</f7-swipeout-button>
+                  v-t="'zones.enable'"
+                />
                 <f7-swipeout-button
                   v-if="!record.disabled"
                   color="orange"
                   @click="disableRecord(record)"
-                >Disable</f7-swipeout-button>
+                  v-t="'zones.disable'"
+                />
               </f7-swipeout-actions>
             </template>
           </f7-list-item>
         </template>
       </f7-list>
       <f7-block-footer class="text-align-center">
-        <p>{{ $t('misc.records', { n: recordList.length }) }}</p>
+        <p v-t="{ path: 'zones.records', args: [recordList.length] }" />
       </f7-block-footer>
     </template>
   </f7-page>
@@ -146,8 +155,10 @@
   margin-right: 5px;
 }
 
-:deep .item-text,
-:deep .item-subtitle,
+.domain-text {
+  font-size: 1.5em;
+}
+
 :deep .item-footer {
   --f7-list-item-text-max-lines: 8;
   white-space: pre;
@@ -155,12 +166,6 @@
 
 :deep .badge {
   margin-left: 5px;
-}
-
-:deep .item-media {
-  max-width: 24px;
-  transform: rotate(-90deg);
-  align-self: auto !important;
 }
 
 .expiry-text {
@@ -172,9 +177,14 @@ import { f7, f7ready } from "framework7-vue";
 import { ref } from "vue";
 import SelectMixin from "@/components/select-mixin";
 import RecordMixin from "@/components/record-mixin";
+import { loadLocaleMessages } from '../js/i18n';
+import ContextMenuMixin from "@/components/context-menu-mixin";
 
 export default {
-  mixins: [SelectMixin, RecordMixin],
+  i18n: {
+    messages: loadLocaleMessages(require.context('@/assets/i18n/zones'))
+  },
+  mixins: [SelectMixin, RecordMixin, ContextMenuMixin],
   data() {
     return {
       recordList: [],
@@ -192,60 +202,35 @@ export default {
         this.fetchData();
       });
       this.fetchData();
-    });
-  },
-  methods: {
-    showContextMenu(record, event) {
-      event.preventDefault();
-
-      var items = [];
-
-      /*{
-              label: this.$t('zones.options'),
-              divided: true,
-              onClick: () => {
-                this.zoneOptions(zone.name);
-              }
-            }
-            */
-      if (this.canDisableDelete(record)) {
-        if (record.disabled) {
-          items.push({
-            label: this.$t('zones.enable'),
-            onClick: () => {
-              this.enableRecord(record);
-            }
-          });
-        } else {
-          items.push({
-            label: this.$t('zones.disable'),
-            onClick: () => {
-              this.disableRecord(record);
-            },
-          });
-        }
-
-        items.push({
-          label: this.$t('zones.deleterecord'),
-          icon: 'trash',
-          onClick: () => {
+      this.contextMenuItems = [
+        {
+          label: 'zones.disable',
+          icon: 'disable',
+          onClick: (record) => this.disableRecord(record),
+          visible: (record) => this.canDisableDelete(record) && !record.disabled
+        },
+        {
+          label: 'zones.enable',
+          icon: 'enable',
+          onClick: (record) => this.enableRecord(record),
+          visible: (record) => this.canDisableDelete(record) && record.disabled
+        },
+        {
+          label: 'zones.deleterecord',
+          icon: 'delete',
+          onClick: (record) => {
             f7.dialog.confirm(
               this.$t('zones.view.deleteconfirm'),
               this.$t('zones.deleterecord'),
-              () => {
-                this.removeRecord(record);
-              });
-          }
-        });
-
-        this.$contextmenu({
-          x: event.x,
-          y: event.y,
-          items: items
-        });
-      }
-
-    },
+              () => this.removeRecord(record)
+            );
+          },
+          visible: (record) => this.canDisableDelete(record)
+        },
+      ];
+    });
+  },
+  methods: {
     recordClick(event, record) {
       if (this.selectActive) {
         this.selectItemToggle(record);

@@ -86,9 +86,12 @@
 <script>
 import store from '../js/store';
 import { f7 } from "framework7-vue";
-import App from 'framework7-vue/components/app';
+import { loadLocaleMessages } from '../js/i18n';
 
 export default {
+  i18n: {
+    messages: loadLocaleMessages(require.context('@/assets/i18n/zones'))
+  },
   emits: ['zoneCreated'],
   data() {
     return {

@@ -7,7 +7,9 @@
             <f7-link popup-close>{{ $t('dialogs.cancel') }}</f7-link>
           </template>
           <template v-slot:right>
-            <f7-link @click="updateRecord">{{ (isEditing ? $t('dialogs.save') : $t('dialogs.create')) }}</f7-link>
+            <f7-link
+              @click="updateRecord"
+            >{{ (isEditing ? $t('dialogs.save') : $t('dialogs.create')) }}</f7-link>
           </template>
         </f7-navbar>
         <f7-list>
@@ -240,7 +242,7 @@
             v-model:checked="record.overwrite"
           />
           <f7-list-input
-            :label="$t('misc.comment')"
+            :label="$t('zones.comment')"
             type="textarea"
             placeholder
             v-model:value="record.comment"
@@ -255,8 +257,12 @@
 <script>
 import { f7, f7ready } from "framework7-vue";
 import regex from "@/js/regex";
+import { loadLocaleMessages } from '../js/i18n';
 
 export default {
+  i18n: {
+    messages: loadLocaleMessages(require.context('@/assets/i18n/zones'))
+  },
   mounted() {
     f7ready((f7) => {
       this.fetchData();
